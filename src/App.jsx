@@ -1,39 +1,103 @@
-import React from 'react';
-import { Layout, Menu, Button, Card, Row, Col, Typography, Space } from 'antd';
-import { 
-  HomeOutlined, 
-  UserOutlined, 
-  SettingOutlined, 
-  AppstoreOutlined 
-} from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { Layout, Typography, Form, message } from 'antd';
+import { MessageOutlined } from '@ant-design/icons';
 import './App.css';
 
-const { Header, Content, Sider } = Layout;
-const { Title, Paragraph } = Typography;
+// 导入组件
+import WelcomePage from './components/WelcomePage';
+import MessageList from './components/MessageList';
+import ChatForm from './components/ChatForm';
+
+// 导入Hooks
+import { useImageUpload } from './hooks/useImageUpload';
+import { useMessages } from './hooks/useMessages';
+import { useWordCardGenerator } from './hooks/useWordCardGenerator';
+
+// 导入常量和工具
+import { WELCOME_MESSAGE } from './constants';
+import { formatTime } from './utils';
+
+const { Header, Content } = Layout;
+const { Title } = Typography;
+
 
 const App = () => {
-  const menuItems = [
-    {
-      key: '1',
-      icon: <HomeOutlined />,
-      label: '首页',
-    },
-    {
-      key: '2',
-      icon: <AppstoreOutlined />,
-      label: '应用',
-    },
-    {
-      key: '3',
-      icon: <UserOutlined />,
-      label: '用户管理',
-    },
-    {
-      key: '4',
-      icon: <SettingOutlined />,
-      label: '设置',
-    },
-  ];
+  const [showWelcome, setShowWelcome] = useState(true);
+  const [form] = Form.useForm();
+  const [currentTime, setCurrentTime] = useState(Date.now());
+
+  // 使用自定义Hooks
+  const { 
+    fileList, 
+    uploadingImages, 
+    lastUploadedImage,
+    handleUploadChange, 
+    beforeUpload, 
+    clearFileList, 
+    getFirstImageUrl 
+  } = useImageUpload();
+
+  const { 
+    messages, 
+    isLoading, 
+    addUserMessage, 
+    addAssistantMessage, 
+    setLoading 
+  } = useMessages([{ ...WELCOME_MESSAGE, time: formatTime(WELCOME_MESSAGE.timestamp) }]);
+
+  const { generateWordCard } = useWordCardGenerator();
+
+  // 实时更新时间
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 60000); // 每分钟更新一次
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleSubmit = async (values) => {
+    // 验证图片是否上传
+
+    if ( getFirstImageUrl() === null) {
+      message.error('请至少上传一张图片！');
+      return;
+    }
+    
+    // 添加用户消息
+    const userImages = fileList.map(file => file.url || file.thumbUrl);
+    addUserMessage(values.message || '', userImages);
+    form.resetFields();
+    setLoading(true);
+    
+    try {
+      // 获取第一张图片的地址
+      const finalImageUrl = getFirstImageUrl();
+      
+      // 生成单词卡
+      const generatedImages = await generateWordCard(values.message, finalImageUrl);
+      
+      // 清空文件列表
+      clearFileList();
+      
+      // 添加AI回复
+      const content = generatedImages 
+        ? `成功生成了 ${generatedImages.length} 张单词卡图片！${generatedImages[0].url.startsWith('data:') ? ' (使用本地生成)' : ' (使用AI生成)'}`
+        : '抱歉，图片生成失败，请稍后再试。';
+      
+      const images = generatedImages ? generatedImages.map(img => img.url) : [];
+      addAssistantMessage(content, images);
+    } catch (error) {
+      console.error('AI调用失败:', error);
+      addAssistantMessage('抱歉，我现在无法回答您的问题，请稍后再试。');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStartChat = () => {
+    setShowWelcome(false);
+  };
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -49,82 +113,39 @@ const App = () => {
           height: '100%'
         }}>
           <Title level={3} style={{ margin: 0, color: '#1890ff' }}>
-            高顿 React 项目
+            夫子单词卡
           </Title>
-          <Space>
-            <Button type="primary">登录</Button>
-            <Button>注册</Button>
-          </Space>
         </div>
       </Header>
-      
-      <Layout>
-        <Sider width={200} style={{ background: '#fff' }}>
-          <Menu
-            mode="inline"
-            defaultSelectedKeys={['1']}
-            style={{ height: '100%', borderRight: 0 }}
-            items={menuItems}
-          />
-        </Sider>
         
-        <Layout style={{ padding: '24px' }}>
-          <Content>
-            <Row gutter={[16, 16]}>
-              <Col span={24}>
-                <Card>
-                  <Title level={2}>欢迎使用 Ant Design + React</Title>
-                  <Paragraph>
-                    这是一个使用 Ant Design 和 React 构建的现代化 Web 应用程序。
-                    本项目集成了 Vite 作为构建工具，提供了快速的开发体验。
-                  </Paragraph>
-                </Card>
-              </Col>
+      <Layout style={{ padding: '24px' }}>
+        <Content>
+          {showWelcome ? (
+            <WelcomePage onStartChat={handleStartChat} />
+          ) : (
+            <div className="page-dialog-card full-width-dialog">
+              <div className="page-dialog-header">
+                <MessageOutlined style={{ marginRight: '8px', color: '#1890ff' }} />
+                <span>智能对话助手</span>
+              </div>
               
-              <Col xs={24} sm={12} md={8}>
-                <Card title="快速开始" hoverable>
-                  <Paragraph>
-                    运行 <code>npm install</code> 安装依赖
-                  </Paragraph>
-                  <Paragraph>
-                    运行 <code>npm run dev</code> 启动开发服务器
-                  </Paragraph>
-                  <Button type="primary" block>
-                    开始使用
-                  </Button>
-                </Card>
-              </Col>
-              
-              <Col xs={24} sm={12} md={8}>
-                <Card title="组件库" hoverable>
-                  <Paragraph>
-                    内置 Ant Design 组件库，包含丰富的 UI 组件
-                  </Paragraph>
-                  <Paragraph>
-                    支持主题定制和国际化
-                  </Paragraph>
-                  <Button block>
-                    查看文档
-                  </Button>
-                </Card>
-              </Col>
-              
-              <Col xs={24} sm={12} md={8}>
-                <Card title="开发工具" hoverable>
-                  <Paragraph>
-                    Vite 提供快速的开发服务器和热重载
-                  </Paragraph>
-                  <Paragraph>
-                    ESLint 确保代码质量
-                  </Paragraph>
-                  <Button block>
-                    了解更多
-                  </Button>
-                </Card>
-              </Col>
-            </Row>
-          </Content>
-        </Layout>
+              <div className="page-dialog-content">
+                <MessageList messages={messages} isLoading={isLoading} />
+                
+                <ChatForm
+                  form={form}
+                  fileList={fileList}
+                  uploadingImages={uploadingImages}
+                  lastUploadedImage={lastUploadedImage}
+                  isLoading={isLoading}
+                  onUploadChange={handleUploadChange}
+                  beforeUpload={beforeUpload}
+                  onSubmit={handleSubmit}
+                />
+              </div>
+            </div>
+          )}
+        </Content>
       </Layout>
     </Layout>
   );
