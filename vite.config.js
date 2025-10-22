@@ -5,11 +5,12 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 3000,
+    port: 8080,
     open: true,
     host: true,
     allowedHosts: [
       'dev-fuzi.gaodun.com',
+      'fuzi.gaodun.com',
       'localhost',
       '127.0.0.1'
     ],
