@@ -2,17 +2,20 @@
 const isDevelopment = import.meta.env.DEV;
 const isProduction = import.meta.env.PROD;
 
-// API配置
+// 检查是否在正确的域名上
+const isCorrectDomain = typeof window !== 'undefined' && window.location.hostname === 'fuzi.gaodun.com';
+
+// API配置 - 暂时都使用代理，避免CORS问题
 export const DOUBAO_CONFIG = {
   API_KEY: 'bd747896-e89b-46f4-a5ab-0a232d086845',
   ENDPOINT_ID: 'ep-20251015101857-wc8xz',
-  API_URL: isDevelopment ? '/api/doubao-chat' : 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+  API_URL: '/api/doubao-chat'
 };
 
 export const DOUBAO_CONFIG_IMAGE = {
   API_KEY: 'bd747896-e89b-46f4-a5ab-0a232d086845',
   ENDPOINT_ID: 'ep-20251015102102-x2n2t',
-  API_URL: isDevelopment ? '/api/doubao-image' : 'https://ark.cn-beijing.volces.com/api/v3/images/generations'
+  API_URL: '/api/doubao-image'
 };
 
 // 上传配置

@@ -58,9 +58,6 @@ export const uploadImageToCloud = async (file) => {
 // 豆包AI API调用函数
 export const chatWithDoubao = async (userMessage) => {
   try {
-    // 检查是否是生产环境直接调用火山引擎API
-    const isDirectAPI = DOUBAO_CONFIG.API_URL.includes('ark.cn-beijing.volces.com');
-    
     const response = await axios.post(DOUBAO_CONFIG.API_URL, {
       model: DOUBAO_CONFIG.ENDPOINT_ID,
       messages: [
@@ -77,14 +74,9 @@ export const chatWithDoubao = async (userMessage) => {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${DOUBAO_CONFIG.API_KEY}`,
-        'Accept': 'application/json',
-        ...(isDirectAPI && {
-          'Origin': 'https://fuzi.gaodun.com',
-          'Referer': 'https://fuzi.gaodun.com'
-        })
+        'Accept': 'application/json'
       },
-      timeout: 30000,
-      withCredentials: false
+      timeout: 30000
     });
 
     return response.data.choices[0].message.content;
@@ -125,21 +117,13 @@ export const generateImage = async (userMessage, imageUrl) => {
       console.log('添加图片参数到API请求:', imageUrl);
     }
     
-    // 检查是否是生产环境直接调用火山引擎API
-    const isDirectAPI = DOUBAO_CONFIG_IMAGE.API_URL.includes('ark.cn-beijing.volces.com');
-    
     const response = await axios.post(DOUBAO_CONFIG_IMAGE.API_URL, requestData, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${DOUBAO_CONFIG_IMAGE.API_KEY}`,
-        'Accept': 'application/json',
-        ...(isDirectAPI && {
-          'Origin': 'https://fuzi.gaodun.com',
-          'Referer': 'https://fuzi.gaodun.com'
-        })
+        'Accept': 'application/json'
       },
-      timeout: IMAGE_CONFIG.TIMEOUT,
-      withCredentials: false
+      timeout: IMAGE_CONFIG.TIMEOUT
     });
     
     console.log('API响应状态:', response.status);
