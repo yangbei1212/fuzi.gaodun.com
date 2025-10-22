@@ -58,6 +58,9 @@ export const uploadImageToCloud = async (file) => {
 // 豆包AI API调用函数
 export const chatWithDoubao = async (userMessage) => {
   try {
+    // 检查是否是生产环境直接调用火山引擎API
+    const isDirectAPI = DOUBAO_CONFIG.API_URL.includes('ark.cn-beijing.volces.com');
+    
     const response = await axios.post(DOUBAO_CONFIG.API_URL, {
       model: DOUBAO_CONFIG.ENDPOINT_ID,
       messages: [
@@ -73,14 +76,27 @@ export const chatWithDoubao = async (userMessage) => {
     }, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${DOUBAO_CONFIG.API_KEY}`
+        'Authorization': `Bearer ${DOUBAO_CONFIG.API_KEY}`,
+        'Accept': 'application/json',
+        ...(isDirectAPI && {
+          'Origin': 'https://fuzi.gaodun.com',
+          'Referer': 'https://fuzi.gaodun.com'
+        })
       },
-      timeout: 30000
+      timeout: 30000,
+      withCredentials: false
     });
 
     return response.data.choices[0].message.content;
   } catch (error) {
     console.error('调用豆包AI失败:', error.response?.data || error.message);
+    console.error('错误状态码:', error.response?.status);
+    
+    // 如果是CORS错误，提供更友好的错误信息
+    if (error.message.includes('CORS') || error.message.includes('Network Error')) {
+      throw new Error('网络连接失败，请检查网络设置或稍后重试');
+    }
+    
     throw new Error('抱歉，我现在无法回答您的问题，请稍后再试。');
   }
 };
@@ -96,7 +112,8 @@ export const generateImage = async (userMessage, imageUrl) => {
       model: DOUBAO_CONFIG_IMAGE.ENDPOINT_ID,
       prompt: userMessage,
       n: 1,
-      size: IMAGE_CONFIG.SIZE
+      size: IMAGE_CONFIG.SIZE,
+      response_format: 'url'
     };
     
     console.log('API请求参数:', requestData);
@@ -108,14 +125,25 @@ export const generateImage = async (userMessage, imageUrl) => {
       console.log('添加图片参数到API请求:', imageUrl);
     }
     
+    // 检查是否是生产环境直接调用火山引擎API
+    const isDirectAPI = DOUBAO_CONFIG_IMAGE.API_URL.includes('ark.cn-beijing.volces.com');
+    
     const response = await axios.post(DOUBAO_CONFIG_IMAGE.API_URL, requestData, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${DOUBAO_CONFIG_IMAGE.API_KEY}`,
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        ...(isDirectAPI && {
+          'Origin': 'https://fuzi.gaodun.com',
+          'Referer': 'https://fuzi.gaodun.com'
+        })
       },
-      timeout: IMAGE_CONFIG.TIMEOUT
+      timeout: IMAGE_CONFIG.TIMEOUT,
+      withCredentials: false
     });
+    
+    console.log('API响应状态:', response.status);
+    console.log('API响应数据:', response.data);
     
     if (response.data && response.data.data) {
       // 确保返回的是数组格式
@@ -127,11 +155,31 @@ export const generateImage = async (userMessage, imageUrl) => {
       console.log('图片数据:', images);
       
       return images;
+    } else if (response.data && response.data.choices) {
+      // 处理不同的响应格式
+      const images = response.data.choices.map(choice => ({
+        url: choice.message?.content || choice.text || choice.url,
+        revised_prompt: choice.message?.role || choice.revised_prompt
+      }));
+      
+      console.log('API返回的图片数量:', images.length);
+      console.log('图片数据:', images);
+      
+      return images;
     } else {
+      console.error('未知的响应格式:', response.data);
       throw new Error('响应数据格式错误');
     }
   } catch (error) {
     console.error('API调用失败:', error.response?.data || error.message);
+    console.error('错误状态码:', error.response?.status);
+    console.error('错误头信息:', error.response?.headers);
+    
+    // 如果是CORS错误，提供更友好的错误信息
+    if (error.message.includes('CORS') || error.message.includes('Network Error')) {
+      throw new Error('网络连接失败，请检查网络设置或稍后重试');
+    }
+    
     throw error;
   }
 };

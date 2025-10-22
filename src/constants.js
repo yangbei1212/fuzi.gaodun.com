@@ -1,14 +1,18 @@
+// 环境检测
+const isDevelopment = import.meta.env.DEV;
+const isProduction = import.meta.env.PROD;
+
 // API配置
 export const DOUBAO_CONFIG = {
   API_KEY: 'bd747896-e89b-46f4-a5ab-0a232d086845',
   ENDPOINT_ID: 'ep-20251015101857-wc8xz',
-  API_URL: '/api/doubao-chat'
+  API_URL: isDevelopment ? '/api/doubao-chat' : 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
 };
 
 export const DOUBAO_CONFIG_IMAGE = {
   API_KEY: 'bd747896-e89b-46f4-a5ab-0a232d086845',
   ENDPOINT_ID: 'ep-20251015102102-x2n2t',
-  API_URL: '/api/doubao-image'
+  API_URL: isDevelopment ? '/api/doubao-image' : 'https://ark.cn-beijing.volces.com/api/v3/images/generations'
 };
 
 // 上传配置
