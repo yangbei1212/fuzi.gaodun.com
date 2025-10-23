@@ -12,6 +12,7 @@ const ChatForm = ({
   isLoading,
   onUploadChange,
   beforeUpload,
+  onClearLastImage,
   onSubmit
 }) => {
   const [validating, setValidating] = useState(false);
@@ -69,6 +70,7 @@ const ChatForm = ({
       lastUploadedImage={lastUploadedImage}
       onUploadChange={onUploadChange}
       beforeUpload={beforeUpload}
+      onClearLastImage={onClearLastImage}
     />
     
     <div className="page-dialog-input-area">

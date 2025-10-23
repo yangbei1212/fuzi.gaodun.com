@@ -34,6 +34,7 @@ const App = () => {
     handleUploadChange, 
     beforeUpload, 
     clearFileList, 
+    clearLastUploadedImage,
     getFirstImageUrl 
   } = useImageUpload();
 
@@ -174,6 +175,7 @@ const App = () => {
                   isLoading={isLoading}
                   onUploadChange={handleUploadChange}
                   beforeUpload={beforeUpload}
+                  onClearLastImage={clearLastUploadedImage}
                   onSubmit={handleSubmit}
                 />
               </div>

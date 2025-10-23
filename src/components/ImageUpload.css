@@ -1,22 +1,148 @@
-/* 图片来源标签样式 */
-.image-source-tag {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(24, 144, 255, 0.9);
-  color: white;
-  padding: 2px 6px;
+/* 单图片预览容器 */
+.single-image-preview {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 8px;
+}
+
+.preview-image-wrapper {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 6px;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  background: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: visible;
+}
+
+.preview-image-wrapper:hover {
+  border-color: rgba(102, 126, 234, 0.6);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.preview-image-wrapper .preview-image,
+.preview-image-wrapper .ant-image,
+.preview-image-wrapper .ant-image-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
-  z-index: 10;
 }
 
-.preview-item {
-  position: relative;
+.preview-image-wrapper .ant-image {
+  display: block;
 }
 
-/* 确保图片容器有相对定位 */
-.preview-item .preview-image {
-  position: relative;
+/* 删除图片按钮 */
+.delete-image-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  background: #ff4d4f;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 100;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(255, 77, 79, 0.6);
+  border: 2px solid white;
+}
+
+.delete-image-btn:hover {
+  background: #ff1f23;
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(255, 77, 79, 0.8);
+}
+
+.delete-image-btn:active {
+  transform: scale(1.1);
+}
+
+/* 上传状态 */
+.upload-status {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 8px;
+  border-radius: 6px;
+  z-index: 50;
+}
+
+.upload-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 0;
+}
+
+.upload-status span {
+  display: none;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 上传按钮区域 */
+.image-upload {
+  display: inline-block;
+}
+
+.upload-btn {
+  width: 100px !important;
+  height: 100px !important;
+  border-radius: 6px !important;
+  border: 1px dashed rgba(102, 126, 234, 0.4) !important;
+  background: white !important;
+  color: #666 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  font-size: 13px !important;
+}
+
+.upload-btn:hover {
+  border-color: #667eea !important;
+  color: #667eea !important;
+  background: rgba(102, 126, 234, 0.05) !important;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2) !important;
+  transform: translateY(-2px) !important;
+}
+
+.upload-btn .anticon {
+  font-size: 28px !important;
+  margin-bottom: 0 !important;
+  display: block !important;
+}
+
+.upload-btn span {
+  font-size: 12px !important;
+  margin-top: 6px !important;
+  display: block !important;
+  font-weight: 400 !important;
 }

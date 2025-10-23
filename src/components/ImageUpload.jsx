@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Upload, Image } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import './ImageUpload.css';
 
 const ImageUpload = ({ 
@@ -8,83 +8,87 @@ const ImageUpload = ({
   uploadingImages, 
   lastUploadedImage,
   onUploadChange, 
-  beforeUpload 
+  beforeUpload,
+  onClearLastImage 
 }) => {
+  // 判断是否有图片
+  const hasImage = fileList.length > 0 || lastUploadedImage;
+  
+  // 获取当前显示的图片
+  const getCurrentImage = () => {
+    if (fileList.length > 0) {
+      return fileList[0];
+    }
+    return lastUploadedImage;
+  };
+
+  // 删除当前图片
+  const handleDeleteImage = (e) => {
+    e.stopPropagation();
+    if (fileList.length > 0) {
+      // 删除当前文件列表中的图片
+      onUploadChange({ fileList: [] });
+    } else if (lastUploadedImage) {
+      // 删除历史图片
+      onClearLastImage();
+    }
+  };
+
   const uploadProps = {
     beforeUpload,
     onChange: onUploadChange,
-    fileList: fileList,
-    multiple: true,
-    showUploadList: {
-      showPreviewIcon: true,
-      showRemoveIcon: true,
-    }
+    fileList: [],
+    multiple: false,
+    showUploadList: false,
   };
+
+  const currentImage = getCurrentImage();
 
   return (
     <div className="page-dialog-upload-area">
       <div className="upload-label">
         <span className="required-mark">*</span>
-        添加图片
+        {hasImage ? '已上传图片' : '添加图片'}
       </div>
-      <Upload {...uploadProps} className="image-upload">
-        <Button 
-          icon={<PlusOutlined />} 
-          className="upload-btn"
-          size="small"
-        >
-          选择图片
-        </Button>
-      </Upload>
-      {(fileList.length > 0 || lastUploadedImage) && (
-        <div className="upload-preview">
-          {/* 显示当前文件列表中的图片 */}
-          {fileList.map((file, index) => (
-            <div key={index} className="preview-item">
-              <Image
-                src={file.url || file.thumbUrl} 
-                alt={file.name}
-                className="preview-image"
-                preview={{
-                  mask: '点击预览',
-                  maskClassName: 'image-preview-mask'
-                }}
-              />
-              {!file.cloudUrl && uploadingImages && (
-                <div className="upload-status">
-                  <div className="upload-spinner"></div>
-                  <span>上传中...</span>
-                </div>
-              )}
-              {file.cloudUrl && (
-                <div className="upload-success">
-                  <span>✓</span>
-                </div>
-              )}
-            </div>
-          ))}
-          
-          {/* 如果没有当前文件但有之前上传的图片，显示之前上传的图片 */}
-          {fileList.length === 0 && lastUploadedImage && (
-            <div className="preview-item">
-              <Image
-                src={lastUploadedImage.url} 
-                alt={lastUploadedImage.name || '之前上传的图片'}
-                className="preview-image"
-                preview={{
-                  mask: '点击预览',
-                  maskClassName: 'image-preview-mask'
-                }}
-              />
-              <div className="upload-success">
-                <span>✓</span>
+      
+      {/* 当有图片时显示图片预览 */}
+      {hasImage && currentImage && (
+        <div className="single-image-preview">
+          <div className="preview-image-wrapper">
+            <Image
+              src={currentImage.url || currentImage.thumbUrl} 
+              alt="上传的图片"
+              className="preview-image"
+              preview={false}
+            />
+            
+            {/* 上传中状态 */}
+            {fileList.length > 0 && !currentImage.cloudUrl && uploadingImages && (
+              <div className="upload-status">
+                <div className="upload-spinner"></div>
+                <span>上传中...</span>
               </div>
-              <div className="image-source-tag">
-                <span>之前上传</span>
-              </div>
+            )}
+            
+            {/* 删除按钮 */}
+            <div className="delete-image-btn" onClick={handleDeleteImage}>
+              <CloseCircleOutlined />
             </div>
-          )}
+          </div>
         </div>
+      )}
+      
+      {/* 当没有图片时显示上传按钮 */}
+      {!hasImage && (
+        <Upload {...uploadProps} className="image-upload">
+          <Button 
+            icon={<PlusOutlined />} 
+            className="upload-btn"
+            size="large"
+          >
+            选择图片
+          </Button>
+        </Upload>
       )}
     </div>
   );
