@@ -1658,57 +1658,13 @@ code {
   margin: 5px;
 }
 
-/* 播放覆盖层样式 */
-.play-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  border-radius: 8px;
-  z-index: 10; /* 确保在图片上方 */
+.image-container img {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.image-container:hover .play-overlay {
-  opacity: 1;
-}
-
-.play-overlay.playing {
-  opacity: 1;
-  background: rgba(0, 0, 0, 0.5);
-}
-
-.play-icon {
-  font-size: 48px;
-  color: white;
-  transition: all 0.3s ease;
-}
-
-.play-overlay:hover .play-icon {
-  transform: scale(1.1);
-}
-
-.play-overlay.playing .play-icon {
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
+.image-container img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* 预览模态框样式 */
@@ -1727,8 +1683,8 @@ code {
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 90vw;
-  max-height: 90vh;
+  max-width: min(600px, 85vw);
+  max-height: 70vh;
 }
 
 .preview-image {
@@ -1736,43 +1692,57 @@ code {
   max-height: 100%;
   border-radius: 8px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  object-fit: contain;
 }
 
-.preview-play-overlay {
+/* 预览模态框中的播放按钮 - 左上角小喇叭 */
+.preview-play-button {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  top: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border-radius: 8px;
   transition: all 0.3s ease;
+  z-index: 100;
+  backdrop-filter: blur(8px);
 }
 
-.preview-play-overlay:hover {
-  background: rgba(0, 0, 0, 0.6);
+.preview-play-button:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: scale(1.15);
 }
 
-.preview-play-overlay.playing {
-  background: rgba(0, 0, 0, 0.7);
+.preview-play-button.playing {
+  background: rgba(255, 87, 51, 0.9);
 }
 
-.preview-play-icon {
-  font-size: 80px;
+.preview-sound-icon {
+  font-size: 24px;
   color: white;
   transition: all 0.3s ease;
 }
 
-.preview-play-overlay:hover .preview-play-icon {
+.preview-play-button:hover .preview-sound-icon {
   transform: scale(1.1);
 }
 
-.preview-play-overlay.playing .preview-play-icon {
-  animation: pulse 1.5s infinite;
+.preview-play-button.playing .preview-sound-icon {
+  animation: soundWave 1s infinite;
+}
+
+@keyframes soundWave {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
 }
 
 /* 确保Ant Design的预览功能正常工作 */

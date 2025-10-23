@@ -33,6 +33,16 @@ export default defineConfig({
         headers: {
           'Origin': 'https://ark.cn-beijing.volces.com'
         }
+      },
+      // 代理火山引擎TTS语音合成接口
+      '/api/tts': {
+        target: 'https://openspeech.bytedance.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/tts/, '/api/v1/tts'),
+        secure: true,
+        headers: {
+          'Origin': 'https://openspeech.bytedance.com'
+        }
       }
     }
   }

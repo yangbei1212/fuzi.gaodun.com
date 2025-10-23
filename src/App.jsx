@@ -86,7 +86,12 @@ const App = () => {
         : '抱歉，图片生成失败，请稍后再试。';
       
       const images = generatedImages ? generatedImages.map(img => img.url) : [];
-      addAssistantMessage(content, images);
+      const message = addAssistantMessage(content, images);
+      
+      // 将单词文本附加到消息中，用于语音朗读
+      if (message && values.message) {
+        message.word = values.message;
+      }
     } catch (error) {
       console.error('AI调用失败:', error);
       addAssistantMessage('抱歉，我现在无法回答您的问题，请稍后再试。');

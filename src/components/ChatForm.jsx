@@ -29,11 +29,17 @@ const ChatForm = ({
     <div className="page-dialog-input-area">
       <Form.Item
         name="message"
-        rules={[{ required: true, message: '请输入您的问题或消息！' }]}
+        rules={[
+          { required: true, message: '请输入英文单词！' },
+          { 
+            pattern: /^[a-zA-Z\s]+$/, 
+            message: '只能输入英文字母和空格！' 
+          }
+        ]}
         style={{ margin: 0, width: '100%' }}
       >
         <Input.TextArea
-          placeholder="请输入您的问题或消息..."
+          placeholder="请输入英文单词（如：apple, beautiful）..."
           autoSize={{ minRows: 2, maxRows: 4 }}
           className="page-dialog-textarea"
         />

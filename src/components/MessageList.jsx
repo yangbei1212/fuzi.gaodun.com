@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { Image, Modal } from 'antd';
-import { MessageOutlined, UserOutlined, PlayCircleOutlined, PauseCircleOutlined } from '@ant-design/icons';
+import React, { useState, useRef } from 'react';
+import { Modal, message as antdMessage } from 'antd';
+import { MessageOutlined, UserOutlined, SoundOutlined } from '@ant-design/icons';
 import { formatTime } from '../utils';
+import { speakText } from '../services/tts';
 
 const MessageItem = ({ message }) => {
   const [isPlaying, setIsPlaying] = useState({});
   const [previewVisible, setPreviewVisible] = useState({});
+  const audioRef = useRef({});
 
   const handleImageClick = (imageUrl, index) => {
     setPreviewVisible(prev => ({
@@ -14,15 +16,73 @@ const MessageItem = ({ message }) => {
     }));
   };
 
-  const handlePlayToggle = (index, e) => {
+  const handlePlayToggle = async (index, e) => {
     e.stopPropagation(); // 阻止事件冒泡，避免触发图片放大
+    
+    // 如果正在播放，停止播放
+    if (isPlaying[index] && audioRef.current[index]) {
+      audioRef.current[index].pause();
+      audioRef.current[index].currentTime = 0;
+      setIsPlaying(prev => ({
+        ...prev,
+        [index]: false
+      }));
+      return;
+    }
+    
+    // 获取要朗读的单词
+    const wordToSpeak = message.word || message.content;
+    
+    if (!wordToSpeak) {
+      antdMessage.warning('没有找到要朗读的内容');
+      return;
+    }
+    
+    console.log('准备朗读单词:', wordToSpeak);
+    
+    // 开始播放
     setIsPlaying(prev => ({
       ...prev,
-      [index]: !prev[index]
+      [index]: true
     }));
+    
+    try {
+      const audio = await speakText(wordToSpeak);
+      audioRef.current[index] = audio;
+      
+      // 监听播放结束
+      audio.addEventListener('ended', () => {
+        setIsPlaying(prev => ({
+          ...prev,
+          [index]: false
+        }));
+      });
+      
+      audio.addEventListener('error', () => {
+        setIsPlaying(prev => ({
+          ...prev,
+          [index]: false
+        }));
+        antdMessage.error('语音播放失败');
+      });
+      
+    } catch (error) {
+      console.error('语音合成失败:', error);
+      setIsPlaying(prev => ({
+        ...prev,
+        [index]: false
+      }));
+      antdMessage.error(error.message || '语音合成失败，请稍后重试');
+    }
   };
 
   const handlePreviewClose = (index) => {
+    // 停止播放音频
+    if (audioRef.current[index]) {
+      audioRef.current[index].pause();
+      audioRef.current[index].currentTime = 0;
+    }
+    
     setPreviewVisible(prev => ({
       ...prev,
       [index]: false
@@ -48,7 +108,7 @@ const MessageItem = ({ message }) => {
           <div className="message-images">
             {message.images.map((imageUrl, index) => (
               <div key={index} className="image-container">
-                <Image
+                <img
                   src={imageUrl} 
                   alt={`Generated image ${index + 1}`}
                   className="generated-image"
@@ -57,25 +117,11 @@ const MessageItem = ({ message }) => {
                     maxHeight: '200px', 
                     margin: '5px',
                     borderRadius: '8px',
-                    border: '1px solid #d9d9d9'
+                    border: '1px solid #d9d9d9',
+                    cursor: 'pointer'
                   }}
-                  preview={{
-                    mask: '点击放大',
-                    maskClassName: 'image-preview-mask'
-                  }}
+                  onClick={() => handleImageClick(imageUrl, index)}
                 />
-                
-                {/* 播放状态覆盖层 */}
-                <div 
-                  className={`play-overlay ${isPlaying[index] ? 'playing' : ''}`}
-                  onClick={(e) => handlePlayToggle(index, e)}
-                >
-                  {isPlaying[index] ? (
-                    <PauseCircleOutlined className="play-icon" />
-                  ) : (
-                    <PlayCircleOutlined className="play-icon" />
-                  )}
-                </div>
               </div>
             ))}
           </div>
@@ -101,14 +147,11 @@ const MessageItem = ({ message }) => {
               className="preview-image"
             />
             <div 
-              className={`preview-play-overlay ${isPlaying[index] ? 'playing' : ''}`}
+              className={`preview-play-button ${isPlaying[index] ? 'playing' : ''}`}
               onClick={() => handlePlayToggle(index, { stopPropagation: () => {} })}
+              title={isPlaying[index] ? '停止播放' : '播放'}
             >
-              {isPlaying[index] ? (
-                <PauseCircleOutlined className="preview-play-icon" />
-              ) : (
-                <PlayCircleOutlined className="preview-play-icon" />
-              )}
+              <SoundOutlined className="preview-sound-icon" />
             </div>
           </div>
         </Modal>

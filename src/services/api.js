@@ -106,6 +106,7 @@ export const generateImage = async (userMessage, imageUrl) => {
       n: 1,
       size: IMAGE_CONFIG.SIZE,
       response_format: 'url'
+
     };
     
     console.log('API请求参数:', requestData);
