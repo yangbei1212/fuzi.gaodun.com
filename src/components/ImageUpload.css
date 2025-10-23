@@ -146,3 +146,80 @@
   display: block !important;
   font-weight: 400 !important;
 }
+
+/* 响应式设计 - 平板 */
+@media (max-width: 768px) {
+  .preview-image-wrapper {
+    width: 80px;
+    height: 80px;
+  }
+
+  .upload-btn {
+    width: 80px !important;
+    height: 80px !important;
+  }
+
+  .delete-image-btn {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    top: -5px;
+    right: -5px;
+  }
+
+  .upload-btn .anticon {
+    font-size: 24px !important;
+  }
+
+  .upload-btn span {
+    font-size: 11px !important;
+    margin-top: 4px !important;
+  }
+
+  .upload-spinner {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* 响应式设计 - 手机 */
+@media (max-width: 480px) {
+  .preview-image-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 4px;
+  }
+
+  .upload-btn {
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 4px !important;
+  }
+
+  .delete-image-btn {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+    top: -4px;
+    right: -4px;
+    border: 1.5px solid white;
+  }
+
+  .upload-btn .anticon {
+    font-size: 20px !important;
+  }
+
+  .upload-btn span {
+    font-size: 10px !important;
+    margin-top: 3px !important;
+  }
+
+  .upload-spinner {
+    width: 12px;
+    height: 12px;
+  }
+
+  .upload-status {
+    border-radius: 4px;
+  }
+}
