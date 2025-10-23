@@ -27,16 +27,18 @@ const WelcomePage = ({ onStartChat }) => {
 
   return (
     <Card className="welcome-page-card">
-      {/* 精简粒子背景 - 更少但更精致 */}
+      {/* 精致粒子背景 - 多层效果 */}
       <div className="particles-container">
-        {[...Array(12)].map((_, i) => (
+        {[...Array(15)].map((_, i) => (
           <div 
             key={i} 
             className="particle" 
             style={{
               left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 8}s`,
-              animationDuration: `${8 + Math.random() * 8}s`
+              animationDelay: `${Math.random() * 10}s`,
+              animationDuration: `${12 + Math.random() * 12}s`,
+              width: i % 3 === 0 ? '4px' : '3px',
+              height: i % 3 === 0 ? '4px' : '3px'
             }}
           />
         ))}

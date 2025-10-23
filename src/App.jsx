@@ -107,14 +107,15 @@ const App = () => {
   return (
     <Layout style={{ minHeight: '100vh', background: 'transparent' }}>
       <Header style={{ 
-        background: 'rgba(255, 255, 255, 0.95)', 
-        padding: '0 32px',
-        boxShadow: '0 4px 24px rgba(0, 0, 0, 0.1)',
-        backdropFilter: 'blur(20px)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
+        background: 'rgba(255, 255, 255, 0.97)', 
+        padding: '0 40px',
+        boxShadow: '0 4px 32px rgba(0, 0, 0, 0.08), 0 0 1px rgba(0, 0, 0, 0.1)',
+        backdropFilter: 'blur(24px)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.4)',
         position: 'sticky',
         top: 0,
-        zIndex: 100
+        zIndex: 100,
+        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
       }}>
         <div style={{ 
           display: 'flex', 
@@ -122,29 +123,34 @@ const App = () => {
           alignItems: 'center',
           height: '100%'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
             <div style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '12px',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              width: '44px',
+              height: '44px',
+              borderRadius: '14px',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: 'white',
-              fontSize: '20px',
-              fontWeight: 'bold',
-              boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)',
-              animation: 'logoFloat 3s ease-in-out infinite'
+              fontSize: '22px',
+              fontWeight: '800',
+              boxShadow: '0 6px 20px rgba(102, 126, 234, 0.45), 0 0 40px rgba(118, 75, 162, 0.2)',
+              animation: 'logoFloat 3s ease-in-out infinite',
+              transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+              cursor: 'pointer'
             }}>
               夫
             </div>
             <Title level={3} style={{ 
               margin: 0, 
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
               WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              fontWeight: 700
+              fontWeight: 800,
+              letterSpacing: '-0.5px',
+              fontSize: '20px'
             }}>
               夫子单词卡
             </Title>
@@ -152,15 +158,25 @@ const App = () => {
         </div>
       </Header>
         
-      <Layout style={{ padding: '24px' }}>
+      <Layout className="main-content-wrapper" style={{ padding: '24px' }}>
         <Content>
           {showWelcome ? (
             <WelcomePage onStartChat={handleStartChat} />
           ) : (
             <div className="page-dialog-card full-width-dialog">
               <div className="page-dialog-header">
-                <MessageOutlined style={{ marginRight: '8px', color: '#1890ff' }} />
-                <span>智能对话助手</span>
+                <div className="page-dialog-header-left">
+                  <div className="page-dialog-header-avatar">
+                    <MessageOutlined />
+                  </div>
+                  <div className="page-dialog-header-info">
+                    <div className="page-dialog-header-title">AI 单词卡助手</div>
+                    <div className="page-dialog-header-subtitle">在线 · 即时回复</div>
+                  </div>
+                </div>
+                <div className="page-dialog-header-actions">
+                  {/* 可以添加更多操作按钮 */}
+                </div>
               </div>
               
               <div className="page-dialog-content">
