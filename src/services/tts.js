@@ -14,12 +14,60 @@ const TTS_CONFIG = {
   API_URL: 'https://fuzi-api.gaodun.com/api/tts',
 };
 
+// 音频缓存 Map - 以文本为 key，Blob 为 value
+const audioCache = new Map();
+
+// 缓存统计信息
+const cacheStats = {
+  hits: 0,
+  misses: 0,
+  size: 0
+};
+
 /**
- * 调用火山引擎 TTS API 合成语音
+ * 获取缓存统计信息
+ * @returns {object} 缓存统计
+ */
+export const getCacheStats = () => {
+  return {
+    ...cacheStats,
+    entries: audioCache.size,
+    hitRate: cacheStats.hits + cacheStats.misses > 0 
+      ? (cacheStats.hits / (cacheStats.hits + cacheStats.misses) * 100).toFixed(2) + '%'
+      : '0%'
+  };
+};
+
+/**
+ * 清空音频缓存
+ */
+export const clearAudioCache = () => {
+  audioCache.clear();
+  cacheStats.hits = 0;
+  cacheStats.misses = 0;
+  cacheStats.size = 0;
+  console.log('音频缓存已清空');
+};
+
+/**
+ * 调用火山引擎 TTS API 合成语音（带缓存）
  * @param {string} text - 要朗读的英文文本
  * @returns {Promise<Blob>} - 返回音频 Blob
  */
 export const textToSpeech = async (text) => {
+  // 标准化文本（去除首尾空格，转小写）
+  const normalizedText = text.trim().toLowerCase();
+  
+  // 检查缓存
+  if (audioCache.has(normalizedText)) {
+    cacheStats.hits++;
+    console.log(`✅ 使用缓存的音频: "${normalizedText}" (缓存命中: ${cacheStats.hits}次)`);
+    return audioCache.get(normalizedText);
+  }
+  
+  cacheStats.misses++;
+  console.log(`🔄 首次获取音频: "${normalizedText}" (API 调用: ${cacheStats.misses}次)`);
+  
   try {
     console.log('调用 TTS API，朗读文本:', text);
     
@@ -53,6 +101,12 @@ export const textToSpeech = async (text) => {
         const audioBlob = new Blob([bytes], { type: 'audio/mpeg' });
         
         console.log('转换后的音频 Blob 大小:', audioBlob.size, 'bytes');
+        
+        // 存入缓存
+        audioCache.set(normalizedText, audioBlob);
+        cacheStats.size += audioBlob.size;
+        console.log(`💾 音频已缓存: "${normalizedText}" (缓存总数: ${audioCache.size})`);
+        
         return audioBlob;
       } else {
         // API 返回错误
@@ -62,6 +116,12 @@ export const textToSpeech = async (text) => {
     } else if (response.data instanceof Blob) {
       // 返回的是直接的音频流
       console.log('TTS 返回音频流，大小:', response.data.size, 'bytes');
+      
+      // 存入缓存
+      audioCache.set(normalizedText, response.data);
+      cacheStats.size += response.data.size;
+      console.log(`💾 音频已缓存: "${normalizedText}" (缓存总数: ${audioCache.size})`);
+      
       return response.data;
     } else {
       
