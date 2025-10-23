@@ -100,11 +100,16 @@ const App = () => {
   };
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ minHeight: '100vh', background: 'transparent' }}>
       <Header style={{ 
-        background: '#fff', 
-        padding: '0 24px',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+        background: 'rgba(255, 255, 255, 0.95)', 
+        padding: '0 32px',
+        boxShadow: '0 4px 24px rgba(0, 0, 0, 0.1)',
+        backdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 100
       }}>
         <div style={{ 
           display: 'flex', 
@@ -112,9 +117,33 @@ const App = () => {
           alignItems: 'center',
           height: '100%'
         }}>
-          <Title level={3} style={{ margin: 0, color: '#1890ff' }}>
-            夫子单词卡
-          </Title>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '12px',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white',
+              fontSize: '20px',
+              fontWeight: 'bold',
+              boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)',
+              animation: 'logoFloat 3s ease-in-out infinite'
+            }}>
+              夫
+            </div>
+            <Title level={3} style={{ 
+              margin: 0, 
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              fontWeight: 700
+            }}>
+              夫子单词卡
+            </Title>
+          </div>
         </div>
       </Header>
         
