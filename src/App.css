@@ -1592,7 +1592,7 @@ code {
   height: calc(100% - 80px);
 }
 
-/* 💎 消息列表区域 - 专业级设计 */
+/* 💎 消息列表区域 - 专业级设计（优化滚动性能）*/
 .page-dialog-messages {
   flex: 1;
   padding: 20px 24px 24px;
@@ -1601,7 +1601,9 @@ code {
   max-height: 400px;
   position: relative;
   transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
+  -webkit-overflow-scrolling: touch;
+  will-change: scroll-position;
 }
 
 /* 移除白色渐变遮罩，保持简洁专业 */
@@ -1800,10 +1802,18 @@ code {
 
 /* 图片上传区域样式 */
 .page-dialog-upload-area {
-  padding: 20px 24px 12px 24px;
-  border-bottom: 1px solid rgba(102, 126, 234, 0.1);
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.03), rgba(118, 75, 162, 0.03));
+  padding: 12px 16px;
+  margin: 0 20px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, #fafbfc 0%, #f9fafb 100%);
   backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.page-dialog-upload-area:hover {
+  background: linear-gradient(135deg, #f9fafb 0%, #f5f6f7 100%);
+  border-color: #d1d5db;
 }
 
 /* 图片地址输入区域样式 */
@@ -1864,17 +1874,18 @@ code {
 
 .upload-label {
   font-size: 14px;
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 8px;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
+  gap: 6px;
+  letter-spacing: -0.2px;
 }
 
 .required-mark {
-  color: #ff4d4f;
-  margin-right: 4px;
-  font-weight: bold;
+  color: #ef4444;
+  font-weight: 700;
 }
 
 .image-upload {
@@ -1983,7 +1994,7 @@ code {
 .page-dialog-input-area {
   display: flex;
   padding: 16px 20px;
-  align-items: flex-end;
+  align-items: center;
   gap: 12px;
   background: white;
   border-top: 1px solid #e5e7eb;
@@ -1992,6 +2003,9 @@ code {
 /* ✨ 输入框 - 专业级设计（模仿 Slack/Telegram）*/
 .page-dialog-textarea {
   flex: 1;
+  height: 40px;
+  min-height: 40px;
+  max-height: 120px;
   border-radius: 20px;
   border: 1.5px solid #e5e7eb;
   resize: none;
@@ -1999,9 +2013,10 @@ code {
   line-height: 1.5;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   width: 100%;
-  padding: 10px 16px;
+  padding: 7px 16px;
   background: #f9fafb;
   box-shadow: none;
+  box-sizing: border-box;
 }
 
 .page-dialog-textarea:focus {
@@ -2031,6 +2046,7 @@ code {
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .page-dialog-send-btn:hover {
@@ -2091,7 +2107,7 @@ code {
   }
 }
 
-/* 💎 消息列表滚动条 - 专业级简洁设计 */
+/* 💎 消息列表滚动条 - 优化性能 */
 .page-dialog-messages::-webkit-scrollbar {
   width: 6px;
 }
@@ -2103,7 +2119,6 @@ code {
 .page-dialog-messages::-webkit-scrollbar-thumb {
   background: #d1d5db;
   border-radius: 3px;
-  transition: all 0.2s ease;
 }
 
 .page-dialog-messages::-webkit-scrollbar-thumb:hover {

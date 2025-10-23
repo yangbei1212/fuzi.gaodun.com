@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { Form, Input, Button } from 'antd';
 import { SendOutlined } from '@ant-design/icons';
 import ImageUpload from './ImageUpload';
-import { validateEnglishWord } from '../services/dictionary';
 
 const ChatForm = ({ 
   form,
@@ -14,10 +13,10 @@ const ChatForm = ({
   beforeUpload,
   onSubmit
 }) => {
-  const [validating, setValidating] = useState(false);
+  const textAreaRef = useRef(null);
 
-  // 自定义单词验证器
-  const wordValidator = async (_, value) => {
+  // 简化的单词验证器（只做本地格式验证，不调用API）
+  const wordValidator = (_, value) => {
     if (!value || !value.trim()) {
       return Promise.reject(new Error('请输入英文单词！'));
     }
@@ -39,22 +38,12 @@ const ChatForm = ({
       return Promise.reject(new Error('请输入单个英文单词（不要包含空格）'));
     }
 
-    // 调用API验证单词
-    setValidating(true);
-    try {
-      const result = await validateEnglishWord(cleanWord);
-      setValidating(false);
-      
-      if (!result.valid) {
-        return Promise.reject(new Error(result.message));
-      }
-      
-      return Promise.resolve();
-    } catch (error) {
-      setValidating(false);
-      // 如果验证失败，也允许通过（降级处理）
-      return Promise.resolve();
+    // 检查长度
+    if (cleanWord.length > 45) {
+      return Promise.reject(new Error('单词长度过长'));
     }
+
+    return Promise.resolve();
   };
 
   return (
@@ -77,14 +66,16 @@ const ChatForm = ({
         rules={[
           { validator: wordValidator }
         ]}
-        validateTrigger="onBlur"
+        validateTrigger={['onBlur', 'onSubmit']}
         style={{ margin: 0, width: '100%' }}
       >
         <Input.TextArea
+          ref={textAreaRef}
           placeholder="请输入英文单词（如：apple, beautiful）..."
-          autoSize={{ minRows: 2, maxRows: 4 }}
+          autoSize={{ minRows: 1, maxRows: 4 }}
           className="page-dialog-textarea"
-          disabled={validating}
+          disabled={isLoading}
+          autoFocus={false}
         />
       </Form.Item>
       <Button
@@ -92,10 +83,10 @@ const ChatForm = ({
         htmlType="submit"
         icon={<SendOutlined />}
         className="page-dialog-send-btn"
-        loading={isLoading || validating}
-        disabled={isLoading || validating}
+        loading={isLoading}
+        disabled={isLoading || uploadingImages}
       >
-        {validating ? '验证单词中...' : isLoading ? 'AI思考中...' : '发送'}
+        {isLoading ? 'AI思考中...' : '发送'}
       </Button>
     </div>
   </Form>

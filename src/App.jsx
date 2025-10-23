@@ -34,7 +34,9 @@ const App = () => {
     handleUploadChange, 
     beforeUpload, 
     clearFileList, 
-    getFirstImageUrl 
+    clearLastUploadedImage,
+    getFirstImageUrl,
+    saveToHistory
   } = useImageUpload();
 
   const { 
@@ -77,8 +79,14 @@ const App = () => {
       // 生成单词卡
       const generatedImages = await generateWordCard(values.message, finalImageUrl);
       
-      // 清空文件列表
+      // 生成成功后，保存图片到历史记录
+      if (generatedImages && generatedImages.length > 0) {
+        saveToHistory();
+      }
+      
+      // 清空文件列表和最后上传的图片，允许用户重新上传
       clearFileList();
+      clearLastUploadedImage();
       
       // 添加AI回复
       const content = generatedImages 
