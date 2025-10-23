@@ -9,16 +9,9 @@ const generateUUID = () => {
   });
 };
 
-// 环境检测
-const isDevelopment = import.meta.env.DEV;
-
-// 火山引擎 TTS 配置
+// TTS 配置 - 统一使用新的后端接口
 const TTS_CONFIG = {
-  // 开发环境使用 Vite proxy，生产环境使用 PHP 代理
-  API_URL: isDevelopment ? '/api/tts' : '/api/tts.php',
-  APP_ID: '1078202242',
-  TOKEN: 'ghoh5hrIJgt5u7Ne5jWVNjJXaBkrnm0K',
-  CLUSTER: 'volcano_tts'
+  API_URL: 'https://fuzi-api.gaodun.com/api/tts',
 };
 
 /**
@@ -30,46 +23,13 @@ export const textToSpeech = async (text) => {
   try {
     console.log('调用 TTS API，朗读文本:', text);
     
-    const requestData = {
-      app: {
-        appid: TTS_CONFIG.APP_ID,
-        token: TTS_CONFIG.TOKEN,
-        cluster: TTS_CONFIG.CLUSTER
-      },
-      user: {
-        uid: generateUUID()
-      },
-      audio: {
-        voice_type: 'BV027_streaming',
-        encoding: 'mp3',
-        compression_rate: 1,
-        rate: 24000,
-        speed_ratio: 1.0,
-        volume_ratio: 1.0,
-        pitch_ratio: 1.0,
-        emotion: 'happy',
-        language: 'en'
-      },
-      request: {
-        reqid: generateUUID(),
-        text: text,
-        text_type: 'plain',
-        operation: 'query',
-        silence_duration: '125',
-        with_frontend: '1',
-        frontend_type: 'unitTson',
-        pure_english_opt: '1'
-      }
-    };
+    // 将 text 作为 URL 查询参数
+    const url = `${TTS_CONFIG.API_URL}?text=${encodeURIComponent(text)}`;
+    
+    console.log('TTS 请求 URL:', url);
 
-    console.log('TTS 请求参数:', requestData);
-
-    // 先尝试获取 JSON 响应
-    const response = await axios.post(TTS_CONFIG.API_URL, requestData, {
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Authorization': `Bearer; ${TTS_CONFIG.TOKEN}`
-      },
+    // 发送 POST 请求
+    const response = await axios.post(url, null, {
       timeout: 30000
     });
 
