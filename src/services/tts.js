@@ -64,7 +64,7 @@ export const textToSpeech = async (text) => {
       console.log('TTS 返回音频流，大小:', response.data.size, 'bytes');
       return response.data;
     } else {
-      console.error('未知的响应格式:', response.data);
+      
       throw new Error('TTS API 返回的数据格式不正确');
     }
   } catch (error) {
