@@ -1,30 +1,62 @@
+/* 💎 上传区域整体容器 - 紧凑版 */
+.page-dialog-upload-area {
+  margin-bottom: 12px;
+  padding: 12px;
+  background: linear-gradient(135deg, #fafbfc 0%, #f9fafb 100%);
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.page-dialog-upload-area:hover {
+  background: linear-gradient(135deg, #f9fafb 0%, #f5f6f7 100%);
+  border-color: #d1d5db;
+}
+
+/* 上传标签 - 紧凑版 */
+.upload-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: -0.2px;
+}
+
+.upload-label .required-mark {
+  color: #ef4444;
+  font-weight: 700;
+}
+
 /* 💎 图片来源标签样式 - Ultra Premium */
 .image-source-tag {
   position: absolute;
   top: 10px;
   right: 10px;
   background: linear-gradient(135deg, 
-    #667eea 0%, 
-    #764ba2 100%);
+    #0066ff 0%, 
+    #0052cc 100%);
   color: white;
   padding: 4px 10px;
   border-radius: 8px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: -0.2px;
+  letter-spacing: 0.3px;
   z-index: 10;
   box-shadow: 
-    0 4px 12px rgba(102, 126, 234, 0.4),
-    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+    0 3px 10px rgba(0, 102, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10px);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .image-source-tag:hover {
-  transform: scale(1.05);
+  transform: scale(1.08);
   box-shadow: 
-    0 6px 16px rgba(102, 126, 234, 0.5),
-    inset 0 1px 2px rgba(255, 255, 255, 0.4);
+    0 5px 15px rgba(0, 102, 255, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 /* ✨ 预览项容器 */
@@ -47,3 +79,350 @@
   position: relative;
   border-radius: 16px;
 }
+
+/* 🎨 Upload 组件 - 紧凑版 */
+.image-upload.ant-upload-wrapper .ant-upload.ant-upload-select {
+  width: 90px;
+  height: 90px;
+  margin: 0 8px 8px 0;
+  border-radius: 12px;
+  border: 2px dashed #d1d5db;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.image-upload.ant-upload-wrapper .ant-upload.ant-upload-select:hover {
+  border-color: #0066ff;
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8f0ff 100%);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 4px 12px rgba(0, 102, 255, 0.12),
+    inset 0 1px 3px rgba(0, 102, 255, 0.05);
+}
+
+.upload-btn-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #9ca3af;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.image-upload.ant-upload-wrapper .ant-upload.ant-upload-select:hover .upload-btn-wrapper {
+  color: #0066ff;
+  transform: scale(1.05);
+}
+
+/* 图片卡片样式 - 紧凑版 */
+.image-upload.ant-upload-wrapper .ant-upload-list-item {
+  width: 90px;
+  height: 90px;
+  margin: 0 8px 8px 0;
+  border-radius: 12px;
+  border: 2px solid #e5e7eb;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.image-upload.ant-upload-wrapper .ant-upload-list-item:hover {
+  border-color: #0066ff;
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 16px rgba(0, 102, 255, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 删除按钮样式优化 - 右上角 ❌ 样式 */
+.image-upload.ant-upload-wrapper .ant-upload-list-item .ant-upload-list-item-actions {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.image-upload.ant-upload-wrapper .ant-upload-list-item:hover .ant-upload-list-item-actions {
+  opacity: 1;
+}
+
+/* ❌ 删除按钮样式 - 紧凑版 */
+.image-upload.ant-upload-wrapper .ant-upload-list-item-actions .anticon-delete {
+  color: #ff4d4f;
+  font-size: 16px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+}
+
+.image-upload.ant-upload-wrapper .ant-upload-list-item-actions .anticon-delete::before {
+  content: '❌';
+  font-size: 12px;
+  display: block;
+}
+
+.image-upload.ant-upload-wrapper .ant-upload-list-item-actions .anticon-delete svg {
+  display: none;
+}
+
+.image-upload.ant-upload-wrapper .ant-upload-list-item-actions .anticon-delete:hover {
+  transform: scale(1.2) rotate(90deg);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 
+    0 5px 15px rgba(255, 77, 79, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* 隐藏预览图标 */
+.image-upload.ant-upload-wrapper .ant-upload-list-item-actions .anticon-eye {
+  display: none;
+}
+
+/* 历史上传图片区域 - 紧凑版 */
+.history-upload-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: none;
+  position: relative;
+}
+
+.history-upload-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, 
+    transparent,
+    rgba(0, 0, 0, 0.08) 20%,
+    rgba(0, 0, 0, 0.08) 80%,
+    transparent
+  );
+}
+
+.history-upload-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: -0.2px;
+}
+
+.history-upload-title::before {
+  content: '📋';
+  font-size: 14px;
+  filter: grayscale(0.2);
+}
+
+.history-upload-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.history-upload-item {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid #e5e7eb;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 
+    0 2px 6px rgba(0, 0, 0, 0.06),
+    0 1px 2px rgba(0, 0, 0, 0.04);
+  background: white;
+}
+
+.history-upload-item:hover {
+  border-color: #0066ff;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 4px 12px rgba(0, 102, 255, 0.15),
+    0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.history-upload-item.selected {
+  border-color: #0066ff;
+  box-shadow: 
+    0 0 0 3px rgba(0, 102, 255, 0.12),
+    0 3px 10px rgba(0, 102, 255, 0.2);
+  transform: scale(1.03);
+}
+
+.history-upload-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.history-upload-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 102, 255, 0) 0%, rgba(0, 102, 255, 0) 100%);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.history-upload-item:hover::after {
+  background: linear-gradient(135deg, rgba(0, 102, 255, 0.08) 0%, rgba(0, 82, 204, 0.12) 100%);
+}
+
+.history-upload-item.selected::after {
+  content: '✓';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(135deg, rgba(0, 102, 255, 0.85) 0%, rgba(0, 82, 204, 0.9) 100%);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* 历史图片删除按钮 - 紧凑版 */
+.history-remove-btn {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 50%;
+  font-size: 10px;
+  opacity: 1;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  z-index: 10;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.history-remove-btn:hover {
+  transform: scale(1.15) rotate(90deg);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 
+    0 4px 12px rgba(255, 77, 79, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* 已添加到上传列表的历史图片样式 - 精致禁用状态 */
+.history-upload-item.in-upload-list {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: #d1d5db;
+  filter: grayscale(0.3);
+}
+
+.history-upload-item.in-upload-list:hover {
+  border-color: #d1d5db;
+  transform: none;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.history-upload-item.in-upload-list::after {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.2) 100%);
+}
+
+/* 已添加标记 - 紧凑版 */
+.already-added-badge {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 8px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.75) 100%);
+  backdrop-filter: blur(6px);
+  color: white;
+  font-size: 9px;
+  font-weight: 600;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 5;
+  pointer-events: none;
+  letter-spacing: 0.2px;
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.history-upload-hint {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 12px;
+  text-align: center;
+  display: block;
+  padding: 0;
+  background: transparent;
+  border: none;
+  transition: color 0.3s ease;
+}
+
+.history-upload-hint:hover {
+  color: #6b7280;
+}
+
+/* 添加加载动画 */
+@keyframes imageUploadFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.image-upload.ant-upload-wrapper .ant-upload-list-item {
+  animation: imageUploadFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.history-upload-item {
+  animation: imageUploadFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.history-upload-item:nth-child(1) { animation-delay: 0s; }
+.history-upload-item:nth-child(2) { animation-delay: 0.05s; }
+.history-upload-item:nth-child(3) { animation-delay: 0.1s; }
+.history-upload-item:nth-child(4) { animation-delay: 0.15s; }
+.history-upload-item:nth-child(5) { animation-delay: 0.2s; }
+.history-upload-item:nth-child(6) { animation-delay: 0.25s; }
+.history-upload-item:nth-child(7) { animation-delay: 0.3s; }
+.history-upload-item:nth-child(8) { animation-delay: 0.35s; }
+.history-upload-item:nth-child(9) { animation-delay: 0.4s; }
+.history-upload-item:nth-child(10) { animation-delay: 0.45s; }

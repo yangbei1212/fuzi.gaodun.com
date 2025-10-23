@@ -129,7 +129,7 @@ const MessageItem = ({ message }) => {
         <div className="message-time">{message.time}</div>
       </div>
 
-      {/* 自定义预览模态框 - 在Ant Design预览基础上添加播放功能 */}
+      {/* 自定义预览模态框 - 只在AI生成的单词卡上添加播放功能 */}
       {message.images && message.images.map((imageUrl, index) => (
         <Modal
           key={index}
@@ -146,13 +146,16 @@ const MessageItem = ({ message }) => {
               alt={`Preview ${index + 1}`}
               className="preview-image"
             />
-            <div 
-              className={`preview-play-button ${isPlaying[index] ? 'playing' : ''}`}
-              onClick={() => handlePlayToggle(index, { stopPropagation: () => {} })}
-              title={isPlaying[index] ? '停止播放' : '播放'}
-            >
-              <SoundOutlined className="preview-sound-icon" />
-            </div>
+            {/* 只在 AI 生成的单词卡（assistant 消息且有 word 属性）上显示发音按钮 */}
+            {message.type === 'assistant' && message.word && (
+              <div 
+                className={`preview-play-button ${isPlaying[index] ? 'playing' : ''}`}
+                onClick={() => handlePlayToggle(index, { stopPropagation: () => {} })}
+                title={isPlaying[index] ? '停止播放' : '播放'}
+              >
+                <SoundOutlined className="preview-sound-icon" />
+              </div>
+            )}
           </div>
         </Modal>
       ))}
@@ -179,15 +182,95 @@ const LoadingMessage = () => (
   </div>
 );
 
-const MessageList = ({ messages, isLoading }) => (
-  <div className="page-dialog-messages">
-    {messages.map((message) => (
-      <MessageItem key={message.id} message={message} />
-    ))}
+const MessageList = ({ messages, isLoading }) => {
+  const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
+  const prevMessagesLengthRef = useRef(messages.length);
+  const isInitialMount = useRef(true);
+  const scrollTimeoutRef = useRef(null);
+  const userScrolling = useRef(false);
+  const scrollCheckTimeoutRef = useRef(null);
+
+  // 检测用户是否在手动滚动
+  const handleScroll = React.useCallback(() => {
+    userScrolling.current = true;
     
-    {/* 加载中消息 */}
-    {isLoading && <LoadingMessage />}
-  </div>
-);
+    // 清除之前的定时器
+    if (scrollCheckTimeoutRef.current) {
+      clearTimeout(scrollCheckTimeoutRef.current);
+    }
+    
+    // 1秒后重置用户滚动状态
+    scrollCheckTimeoutRef.current = setTimeout(() => {
+      userScrolling.current = false;
+    }, 1000);
+  }, []);
+
+  // 自动滚动到底部
+  const scrollToBottom = () => {
+    // 如果用户正在手动滚动，不执行自动滚动
+    if (userScrolling.current) {
+      return;
+    }
+
+    // 清除之前的滚动计时器
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+    
+    // 延迟滚动，确保 DOM 已更新，且只执行一次
+    scrollTimeoutRef.current = setTimeout(() => {
+      if (!userScrolling.current && messagesEndRef.current) {
+        messagesEndRef.current.scrollIntoView({ behavior: 'auto', block: 'end' });
+      }
+    }, 100);
+  };
+
+  // 只在有新消息添加时滚动到底部
+  React.useEffect(() => {
+    // 跳过初始渲染
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      prevMessagesLengthRef.current = messages.length;
+      return;
+    }
+
+    // 只有当消息数量增加时才滚动
+    if (messages.length > prevMessagesLengthRef.current) {
+      scrollToBottom();
+      prevMessagesLengthRef.current = messages.length;
+    }
+  }, [messages.length]);
+
+  // 清理定时器
+  React.useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      if (scrollCheckTimeoutRef.current) {
+        clearTimeout(scrollCheckTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <div 
+      ref={messagesContainerRef}
+      className="page-dialog-messages"
+      onScroll={handleScroll}
+    >
+      {messages.map((message) => (
+        <MessageItem key={message.id} message={message} />
+      ))}
+      
+      {/* 加载中消息 */}
+      {isLoading && <LoadingMessage />}
+      
+      {/* 用于滚动定位的元素 */}
+      <div ref={messagesEndRef} />
+    </div>
+  );
+};
 
 export default MessageList;
