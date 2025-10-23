@@ -1,22 +1,49 @@
-/* 图片来源标签样式 */
+/* 💎 图片来源标签样式 - Ultra Premium */
 .image-source-tag {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(24, 144, 255, 0.9);
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(135deg, 
+    #667eea 0%, 
+    #764ba2 100%);
   color: white;
-  padding: 2px 6px;
-  border-radius: 4px;
+  padding: 4px 10px;
+  border-radius: 8px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 700;
+  letter-spacing: -0.2px;
   z-index: 10;
+  box-shadow: 
+    0 4px 12px rgba(102, 126, 234, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.image-source-tag:hover {
+  transform: scale(1.05);
+  box-shadow: 
+    0 6px 16px rgba(102, 126, 234, 0.5),
+    inset 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+
+/* ✨ 预览项容器 */
 .preview-item {
   position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.preview-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 12px 32px rgba(0, 0, 0, 0.12),
+    0 0 40px rgba(102, 126, 234, 0.1);
 }
 
 /* 确保图片容器有相对定位 */
 .preview-item .preview-image {
   position: relative;
+  border-radius: 16px;
 }
