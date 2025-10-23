@@ -93,6 +93,7 @@ export const chatWithDoubao = async (userMessage) => {
   }
 };
 
+
 // 生成图片API调用
 export const generateImage = async (userMessage, imageUrl) => {
   try {
