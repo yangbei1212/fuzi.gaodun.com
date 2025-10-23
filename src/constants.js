@@ -5,17 +5,19 @@ const isProduction = import.meta.env.PROD;
 // 检查是否在正确的域名上
 const isCorrectDomain = typeof window !== 'undefined' && window.location.hostname === 'fuzi.gaodun.com';
 
-// API配置 - 暂时都使用代理，避免CORS问题
+// API配置
+// 开发环境：使用 Vite proxy（无 .php 后缀）
+// 生产环境：直接调用 PHP 文件（有 .php 后缀）
 export const DOUBAO_CONFIG = {
   API_KEY: 'bd747896-e89b-46f4-a5ab-0a232d086845',
   ENDPOINT_ID: 'ep-20251015101857-wc8xz',
-  API_URL: '/api/doubao-chat'
+  API_URL: isDevelopment ? '/api/doubao-chat' : '/api/doubao-chat.php'
 };
 
 export const DOUBAO_CONFIG_IMAGE = {
   API_KEY: 'bd747896-e89b-46f4-a5ab-0a232d086845',
   ENDPOINT_ID: 'ep-20251015102102-x2n2t',
-  API_URL: '/api/doubao-image'
+  API_URL: isDevelopment ? '/api/doubao-image' : '/api/doubao-image.php'
 };
 
 // 上传配置

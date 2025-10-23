@@ -88,13 +88,58 @@ npm run build
 
 构建文件将生成在 `dist` 目录中。
 
-### 部署到静态托管
+### 生产环境部署说明 ⚠️
 
-可以将 `dist` 目录的内容部署到任何静态文件托管服务，如：
-- Vercel
-- Netlify
-- GitHub Pages
-- 阿里云 OSS
+**重要**：本项目使用后端 PHP 代理来调用火山引擎豆包 AI 接口，避免 CORS 跨域问题。
+
+#### 部署步骤：
+
+1. **构建前端代码**
+   ```bash
+   npm run build
+   ```
+
+2. **部署文件结构**
+   ```
+   服务器根目录/
+   ├── index.html          # 从 dist/ 复制
+   ├── assets/             # 从 dist/assets/ 复制
+   │   ├── *.js
+   │   └── *.css
+   └── api/                # PHP 代理文件
+       ├── doubao-chat.php
+       └── doubao-image.php
+   ```
+
+3. **服务器要求**
+   - PHP 7.4 或更高版本
+   - 开启 cURL 扩展
+   - 支持 JSON 扩展
+
+4. **验证部署**
+   
+   测试聊天接口：
+   ```bash
+   curl -X POST https://fuzi.gaodun.com/api/doubao-chat.php \
+     -H "Content-Type: application/json" \
+     -d '{"messages":[{"role":"user","content":"hello"}]}'
+   ```
+   
+   测试图片生成接口：
+   ```bash
+   curl -X POST https://fuzi.gaodun.com/api/doubao-image.php \
+     -H "Content-Type: application/json" \
+     -d '{"prompt":"a cat","n":1,"size":"2k"}'
+   ```
+
+#### 环境差异说明：
+
+| 环境 | API 路径 | 处理方式 |
+|------|---------|---------|
+| **开发环境** | `/api/doubao-chat` | Vite proxy → 火山引擎 API |
+| **生产环境** | `/api/doubao-chat.php` | PHP 文件 → 火山引擎 API |
+
+代码会自动检测环境并使用正确的路径（见 `src/constants.js`）。
 
 ## 许可证
 
