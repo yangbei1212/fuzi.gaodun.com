@@ -27,17 +27,52 @@ const WelcomePage = ({ onStartChat, cardImages = [] }) => {
   });
   const [modalVisible, setModalVisible] = useState(false);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
 
   const fullText = '专属单词卡';
   
-  // 默认示例卡片（如果没有传入图片）
-  const defaultCards = [
-    { id: 1, image: 'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/74ece_20251024141705.jpeg' },
-    { id: 2, image: 'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/74ece_20251024141705.jpeg' },
-    { id: 3, image: 'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/74ece_20251024141705.jpeg' }
+  // 案例组数据：每个案例包含封面图和对应的组图
+  const cardGroups = [
+    {
+      id: 1,
+      cover: 'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/ec9d1_20251024152449.jpeg',
+      images: [
+        'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/ec9d1_20251024152449.jpeg',
+        'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/da766_20251024153226.jpeg',
+        'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/c1a11_20251024153604.jpeg'
+      ]
+    },
+    {
+      id: 2,
+      cover: 'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/7a597_20251024155618.jpeg',
+      images: [
+        'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/7a597_20251024155618.jpeg',
+        'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/12bd7_20251024161702.jpeg',
+        'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/ba71c_20251024160656.jpeg'
+      ]
+    },
+    {
+      id: 3,
+      cover: 'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/53be3_20251024154908.jpeg',
+      images: [
+        'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/53be3_20251024154908.jpeg',
+        'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/567dd_20251024155445.jpeg',
+        'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/20e3a_20251024155243.jpeg'
+      ]
+    },
+    {
+      id: 4,
+      cover: 'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/bb600_20251024154510.jpeg',
+      images: [
+        'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/bb600_20251024154510.jpeg',
+        'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/f60c9_20251024154610.jpeg',
+        'https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/eda15_20251024155933.jpeg'
+      ]
+    }
   ];
   
-  const displayCards = cardImages.length > 0 ? cardImages : defaultCards;
+  // 当前选中组的图片
+  const currentGroupImages = cardGroups[currentGroupIndex]?.images || [];
 
   // 鼠标跟随效果
   useEffect(() => {
@@ -108,17 +143,18 @@ const WelcomePage = ({ onStartChat, cardImages = [] }) => {
     return () => clearInterval(interval);
   }, [mounted]);
 
-  const handleCardClick = (index) => {
-    setCurrentCardIndex(index);
+  const handleCardClick = (groupIndex) => {
+    setCurrentGroupIndex(groupIndex);
+    setCurrentCardIndex(0); // 从第一张开始
     setModalVisible(true);
   };
 
   const handlePrevCard = () => {
-    setCurrentCardIndex((prev) => (prev === 0 ? displayCards.length - 1 : prev - 1));
+    setCurrentCardIndex((prev) => (prev === 0 ? currentGroupImages.length - 1 : prev - 1));
   };
 
   const handleNextCard = () => {
-    setCurrentCardIndex((prev) => (prev === displayCards.length - 1 ? 0 : prev + 1));
+    setCurrentCardIndex((prev) => (prev === currentGroupImages.length - 1 ? 0 : prev + 1));
   };
 
   const handleFanCardClick = (index) => {
@@ -223,20 +259,20 @@ const WelcomePage = ({ onStartChat, cardImages = [] }) => {
         <div className="welcome-bottom-section">
           <div className="card-showcase-title">
             <Title level={3} className="showcase-title">精选案例</Title>
-            <Paragraph className="showcase-subtitle">查看AI生成的精美单词卡</Paragraph>
+            <Paragraph className="showcase-subtitle">查看AI生成的精美单词卡（ 流行ip 偶像 宠物 萌娃 ）</Paragraph>
           </div>
           
           <div className="card-showcase-grid">
-            {displayCards.map((card, index) => (
+            {cardGroups.map((group, index) => (
               <div 
-                key={card.id || index} 
+                key={group.id} 
                 className="showcase-card-item"
                 style={{ animationDelay: `${index * 0.15}s` }}
                 onClick={() => handleCardClick(index)}
               >
                 <div className="showcase-card-inner">
                   <img 
-                    src={card.image} 
+                    src={group.cover} 
                     alt={`Card ${index + 1}`}
                     className="showcase-card-image"
                   />
@@ -280,14 +316,14 @@ const WelcomePage = ({ onStartChat, cardImages = [] }) => {
                   transform: `translateX(calc(-${currentCardIndex * 100}% - ${currentCardIndex * 24}px))`
                 }}
               >
-                {displayCards.map((card, index) => (
+                {currentGroupImages.map((imageUrl, index) => (
                   <div
-                    key={card.id || index}
+                    key={index}
                     className={`carousel-item ${index === currentCardIndex ? 'active' : ''}`}
                     onClick={() => index !== currentCardIndex && setCurrentCardIndex(index)}
                   >
                     <img 
-                      src={card.image} 
+                      src={imageUrl} 
                       alt={`Card ${index + 1}`}
                       className="carousel-item-image"
                     />
@@ -304,7 +340,7 @@ const WelcomePage = ({ onStartChat, cardImages = [] }) => {
 
           {/* 底部指示器 */}
           <div className="carousel-indicators">
-            {displayCards.map((_, index) => (
+            {currentGroupImages.map((_, index) => (
               <button
                 key={index}
                 className={`carousel-dot ${index === currentCardIndex ? 'active' : ''}`}

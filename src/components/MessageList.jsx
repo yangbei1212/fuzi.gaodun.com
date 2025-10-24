@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Modal, message as antdMessage } from 'antd';
 import { MessageOutlined, UserOutlined, SoundOutlined, DownloadOutlined } from '@ant-design/icons';
 import { formatTime } from '../utils';
@@ -7,7 +7,47 @@ import { speakText } from '../services/tts';
 const MessageItem = ({ message, voiceType }) => {
   const [isPlaying, setIsPlaying] = useState({});
   const [previewVisible, setPreviewVisible] = useState({});
+  const [displayedText, setDisplayedText] = useState('');
+  const [showCursor, setShowCursor] = useState(true);
+  const [isTyping, setIsTyping] = useState(false);
   const audioRef = useRef({});
+  
+  // 流式显示效果 - 只对欢迎消息（id为1）生效
+  useEffect(() => {
+    if (message.id === 1 && message.type === 'assistant') {
+      const fullText = message.content;
+      let currentIndex = 0;
+      setIsTyping(true);
+      
+      const typingInterval = setInterval(() => {
+        if (currentIndex <= fullText.length) {
+          setDisplayedText(fullText.slice(0, currentIndex));
+          currentIndex++;
+        } else {
+          clearInterval(typingInterval);
+          setIsTyping(false);
+        }
+      }, 30); // 每30ms显示一个字符
+      
+      return () => clearInterval(typingInterval);
+    } else {
+      // 非欢迎消息直接显示全部内容
+      setDisplayedText(message.content);
+      setIsTyping(false);
+    }
+  }, [message.content, message.id, message.type]);
+  
+  // 光标闪烁效果
+  useEffect(() => {
+    if (isTyping) {
+      const cursorInterval = setInterval(() => {
+        setShowCursor(prev => !prev);
+      }, 530);
+      return () => clearInterval(cursorInterval);
+    } else {
+      setShowCursor(false);
+    }
+  }, [isTyping]);
 
   const handleImageClick = (imageUrl, index) => {
     setPreviewVisible(prev => ({
@@ -210,7 +250,21 @@ const MessageItem = ({ message, voiceType }) => {
       </div>
       <div className="message-content">
         <div className="message-text" style={{ whiteSpace: 'pre-line' }}>
-          {message.content}
+          {displayedText}
+          {isTyping && (
+            <span 
+              className="typing-cursor-inline" 
+              style={{ 
+                opacity: showCursor ? 1 : 0,
+                transition: 'opacity 0.1s',
+                marginLeft: '2px',
+                color: '#8b5cf6',
+                fontWeight: 'bold'
+              }}
+            >
+              |
+            </span>
+          )}
         </div>
         {message.images && message.images.length > 0 && (
           <div className="message-images">
