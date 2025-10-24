@@ -70,15 +70,9 @@ export const useWordCardGenerator = () => {
 请生成两张图片：正面卡片和反面卡片。`;
       }
       
-      // 调用图片生成API
-      console.log('使用的图片URL:', imageUrl);
-      console.log('图片来源:', imageUrl ? (imageUrl.startsWith('data:') ? '本地生成' : '云存储') : '无图片');
       const generatedImages = await generateImage(aiMessage, imageUrl);
-      console.log('生成的图片数组:', generatedImages);
-      console.log('图片数量:', generatedImages ? generatedImages.length : 0);
       return generatedImages;
     } catch (error) {
-      console.error('图片生成失败:', error);
       // 如果API调用失败，使用本地生成
       return await generateLocalWordCard(aiMessage, imageUrl);
     }
