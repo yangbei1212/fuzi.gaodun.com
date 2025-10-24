@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Typography, Form, message } from 'antd';
-import { MessageOutlined } from '@ant-design/icons';
+import { MessageOutlined, CloseOutlined } from '@ant-design/icons';
 import './App.css';
 
 // 导入组件
@@ -105,6 +105,10 @@ const App = () => {
     setShowWelcome(false);
   };
 
+  const handleCloseChat = () => {
+    setShowWelcome(true);
+  };
+
   return (
     <Layout style={{ minHeight: '100vh', background: 'transparent' }}>
       <Header style={{ 
@@ -160,8 +164,26 @@ const App = () => {
           ) : (
             <div className="page-dialog-card full-width-dialog">
               <div className="page-dialog-header">
-                <MessageOutlined style={{ marginRight: '8px', color: '#1890ff' }} />
-                <span>智能对话助手</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <img 
+                    src="https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/e9360_20251024105135.jpg"
+                    alt="fufu"
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      border: '2px solid rgba(255, 255, 255, 0.3)',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
+                    }}
+                  />
+                  <span>fufu</span>
+                </div>
+                <CloseOutlined 
+                  className="dialog-close-btn"
+                  onClick={handleCloseChat}
+                  title="关闭对话框"
+                />
               </div>
               
               <div className="page-dialog-content">

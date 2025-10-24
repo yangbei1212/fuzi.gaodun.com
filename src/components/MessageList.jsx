@@ -98,7 +98,15 @@ const MessageItem = ({ message }) => {
       className={`message-item ${message.type === 'user' ? 'user-message' : 'assistant-message'}`}
     >
       <div className="message-avatar">
-        {message.type === 'user' ? <UserOutlined /> : <MessageOutlined />}
+        {message.type === 'user' ? (
+          <UserOutlined />
+        ) : (
+          <img 
+            src="https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/e9360_20251024105135.jpg" 
+            alt="fufu"
+            className="assistant-avatar-image"
+          />
+        )}
       </div>
       <div className="message-content">
         <div className="message-text" style={{ whiteSpace: 'pre-line' }}>
@@ -107,19 +115,11 @@ const MessageItem = ({ message }) => {
         {message.images && message.images.length > 0 && (
           <div className="message-images">
             {message.images.map((imageUrl, index) => (
-              <div key={index} className="image-container">
+              <div key={index} className="image-container portrait-image-container">
                 <img
                   src={imageUrl} 
                   alt={`Generated image ${index + 1}`}
-                  className="generated-image"
-                  style={{ 
-                    maxWidth: '200px', 
-                    maxHeight: '200px', 
-                    margin: '5px',
-                    borderRadius: '8px',
-                    border: '1px solid #d9d9d9',
-                    cursor: 'pointer'
-                  }}
+                  className="generated-image portrait-generated-image"
                   onClick={() => handleImageClick(imageUrl, index)}
                 />
               </div>
@@ -138,13 +138,16 @@ const MessageItem = ({ message }) => {
           footer={null}
           width="auto"
           centered
-          className="image-preview-modal"
+          className="image-preview-modal portrait-preview-modal"
+          styles={{
+            body: { padding: 0 }
+          }}
         >
-          <div className="preview-container">
+          <div className="preview-container portrait-preview-container">
             <img 
               src={imageUrl} 
               alt={`Preview ${index + 1}`}
-              className="preview-image"
+              className="preview-image portrait-preview-image"
             />
             {/* 只在 AI 生成的单词卡（assistant 消息且有 word 属性）上显示发音按钮 */}
             {message.type === 'assistant' && message.word && (
@@ -166,7 +169,11 @@ const MessageItem = ({ message }) => {
 const LoadingMessage = () => (
   <div className="message-item assistant-message">
     <div className="message-avatar">
-      <MessageOutlined />
+      <img 
+        src="https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/e9360_20251024105135.jpg" 
+        alt="fufu"
+        className="assistant-avatar-image"
+      />
     </div>
     <div className="message-content">
       <div className="message-text loading-message" style={{ whiteSpace: 'pre-line' }}>

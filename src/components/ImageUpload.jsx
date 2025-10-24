@@ -25,13 +25,9 @@ const ImageUpload = ({
   // 删除当前图片
   const handleDeleteImage = (e) => {
     e.stopPropagation();
-    if (fileList.length > 0) {
-      // 删除当前文件列表中的图片
-      onUploadChange({ fileList: [] });
-    } else if (lastUploadedImage) {
-      // 删除历史图片
-      onClearLastImage();
-    }
+    // 同时清空 fileList 和 lastUploadedImage，确保一次点击就能删除
+    onUploadChange({ fileList: [] });
+    onClearLastImage();
   };
 
   const uploadProps = {
