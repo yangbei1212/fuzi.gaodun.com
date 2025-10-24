@@ -1529,6 +1529,52 @@ code {
   }
 }
 
+/* 英美式发音切换按钮 */
+.voice-type-switch {
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 4px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-left: 8px;
+}
+
+.voice-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  filter: grayscale(50%);
+}
+
+.voice-btn:hover {
+  opacity: 0.9;
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.1);
+  filter: grayscale(0%);
+}
+
+.voice-btn.active {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  filter: grayscale(0%);
+  transform: scale(1.05);
+}
+
+.voice-btn:active {
+  transform: scale(0.95);
+}
+
 .page-dialog-content {
   flex: 1;
   display: flex;
@@ -2292,6 +2338,12 @@ code {
   .portrait-preview-image {
     max-height: 80vh;
   }
+  
+  /* 平板端发音切换按钮优化 */
+  .voice-btn {
+    font-size: 18px;
+    padding: 5px 10px;
+  }
 }
 
 /* 响应式设计 - 移动端 */
@@ -2344,6 +2396,17 @@ code {
   .page-dialog-header {
     padding: 16px;
     font-size: 16px;
+  }
+  
+  /* 移动端发音切换按钮优化 */
+  .voice-type-switch {
+    padding: 3px;
+    gap: 3px;
+  }
+  
+  .voice-btn {
+    font-size: 16px;
+    padding: 4px 8px;
   }
   
   /* 移动端全屏优化 */

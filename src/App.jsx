@@ -25,6 +25,7 @@ const App = () => {
   const [showWelcome, setShowWelcome] = useState(true);
   const [form] = Form.useForm();
   const [currentTime, setCurrentTime] = useState(Date.now());
+  const [voiceType, setVoiceType] = useState('us'); // 'us' 美式, 'uk' 英式
 
   // 使用自定义Hooks
   const { 
@@ -178,6 +179,24 @@ const App = () => {
                     }}
                   />
                   <span>fufu</span>
+                  
+                  {/* 英美式发音切换 */}
+                  <div className="voice-type-switch">
+                    <button 
+                      className={`voice-btn ${voiceType === 'us' ? 'active' : ''}`}
+                      onClick={() => setVoiceType('us')}
+                      title="美式发音"
+                    >
+                      🇺🇸
+                    </button>
+                    <button 
+                      className={`voice-btn ${voiceType === 'uk' ? 'active' : ''}`}
+                      onClick={() => setVoiceType('uk')}
+                      title="英式发音"
+                    >
+                      🇬🇧
+                    </button>
+                  </div>
                 </div>
                 <CloseOutlined 
                   className="dialog-close-btn"
@@ -187,7 +206,7 @@ const App = () => {
               </div>
               
               <div className="page-dialog-content">
-                <MessageList messages={messages} isLoading={isLoading} />
+                <MessageList messages={messages} isLoading={isLoading} voiceType={voiceType} />
                 
                 <ChatForm
                   form={form}

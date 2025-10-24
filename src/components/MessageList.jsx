@@ -4,7 +4,7 @@ import { MessageOutlined, UserOutlined, SoundOutlined } from '@ant-design/icons'
 import { formatTime } from '../utils';
 import { speakText } from '../services/tts';
 
-const MessageItem = ({ message }) => {
+const MessageItem = ({ message, voiceType }) => {
   const [isPlaying, setIsPlaying] = useState({});
   const [previewVisible, setPreviewVisible] = useState({});
   const audioRef = useRef({});
@@ -47,7 +47,7 @@ const MessageItem = ({ message }) => {
     }));
     
     try {
-      const audio = await speakText(wordToSpeak);
+      const audio = await speakText(wordToSpeak, voiceType);
       audioRef.current[index] = audio;
       
       // 监听播放结束
@@ -189,7 +189,7 @@ const LoadingMessage = () => (
   </div>
 );
 
-const MessageList = ({ messages, isLoading }) => {
+const MessageList = ({ messages, isLoading, voiceType = 'us' }) => {
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
   const prevMessagesLengthRef = useRef(messages.length);
@@ -268,7 +268,7 @@ const MessageList = ({ messages, isLoading }) => {
       onScroll={handleScroll}
     >
       {messages.map((message) => (
-        <MessageItem key={message.id} message={message} />
+        <MessageItem key={message.id} message={message} voiceType={voiceType} />
       ))}
       
       {/* 加载中消息 */}

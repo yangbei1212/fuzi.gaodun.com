@@ -11,6 +11,9 @@ const generateUUID = () => {
 
 // TTS 配置 - 统一使用新的后端接口
 const TTS_CONFIG = {
+  APP_ID: "1078202242",
+  TOKEN: "ghoh5hrIJgt5u7Ne5jWVNjJXaBkrnm0K",
+  CLUSTER: "volcano_tts",
   API_URL: 'https://fuzi-api.gaodun.com/api/tts',
 };
 
@@ -52,32 +55,66 @@ export const clearAudioCache = () => {
 /**
  * 调用火山引擎 TTS API 合成语音（带缓存）
  * @param {string} text - 要朗读的英文文本
+ * @param {string} voiceType - 发音类型 'us' 美式 或 'uk' 英式
  * @returns {Promise<Blob>} - 返回音频 Blob
  */
-export const textToSpeech = async (text) => {
+export const textToSpeech = async (text, voiceType = 'us') => {
   // 标准化文本（去除首尾空格，转小写）
   const normalizedText = text.trim().toLowerCase();
   
+  // 缓存key包含发音类型
+  const cacheKey = `${normalizedText}_${voiceType}`;
+  
   // 检查缓存
-  if (audioCache.has(normalizedText)) {
+  if (audioCache.has(cacheKey)) {
     cacheStats.hits++;
-    console.log(`✅ 使用缓存的音频: "${normalizedText}" (缓存命中: ${cacheStats.hits}次)`);
-    return audioCache.get(normalizedText);
+    console.log(`✅ 使用缓存的音频: "${normalizedText}" [${voiceType}] (缓存命中: ${cacheStats.hits}次)`);
+    return audioCache.get(cacheKey);
   }
   
   cacheStats.misses++;
-  console.log(`🔄 首次获取音频: "${normalizedText}" (API 调用: ${cacheStats.misses}次)`);
+  console.log(`🔄 首次获取音频: "${normalizedText}" [${voiceType}] (API 调用: ${cacheStats.misses}次)`);
   
   try {
-    console.log('调用 TTS API，朗读文本:', text);
+    console.log('调用 TTS API，朗读文本:', text, '发音类型:', voiceType);
     
-    // 将 text 作为 URL 查询参数
-    const url = `${TTS_CONFIG.API_URL}?text=${encodeURIComponent(text)}`;
+    // 将 text 和 voiceType 作为 URL 查询参数
+    const url = `${TTS_CONFIG.API_URL}?text=${encodeURIComponent(text)}&voiceType=${voiceType}`;
     
     console.log('TTS 请求 URL:', url);
-
+    const requestData = {
+      app: {
+        appid: TTS_CONFIG.APP_ID,
+        token: TTS_CONFIG.TOKEN,
+        cluster: TTS_CONFIG.CLUSTER
+      },
+      user: {
+        uid: generateUUID()
+      },
+      audio: {
+        voice_type: voiceType === 'us' ? 'BV040_streaming' : 'BV504_streaming',
+        encoding: 'mp3',
+        compression_rate: 1,
+        rate: 24000,
+        speed_ratio: 1.0,
+        volume_ratio: 1.0,
+        pitch_ratio: 1.0,
+        emotion: text,
+        language: voiceType === 'us' ? 'en' : 'en_uk'
+      },
+      request: {
+        reqid: generateUUID(),
+        text: text,
+        text_type: 'plain',
+        operation: 'query',
+        silence_duration: '125',
+        with_frontend: '1',
+        frontend_type: 'unitTson',
+        pure_english_opt: '1'
+      }
+    };
     // 发送 POST 请求
-    const response = await axios.post(url, null, {
+    const response = await axios.post(url, requestData, {
       timeout: 30000
     });
 
@@ -103,9 +140,9 @@ export const textToSpeech = async (text) => {
         console.log('转换后的音频 Blob 大小:', audioBlob.size, 'bytes');
         
         // 存入缓存
-        audioCache.set(normalizedText, audioBlob);
+        audioCache.set(cacheKey, audioBlob);
         cacheStats.size += audioBlob.size;
-        console.log(`💾 音频已缓存: "${normalizedText}" (缓存总数: ${audioCache.size})`);
+        console.log(`💾 音频已缓存: "${normalizedText}" [${voiceType}] (缓存总数: ${audioCache.size})`);
         
         return audioBlob;
       } else {
@@ -118,9 +155,9 @@ export const textToSpeech = async (text) => {
       console.log('TTS 返回音频流，大小:', response.data.size, 'bytes');
       
       // 存入缓存
-      audioCache.set(normalizedText, response.data);
+      audioCache.set(cacheKey, response.data);
       cacheStats.size += response.data.size;
-      console.log(`💾 音频已缓存: "${normalizedText}" (缓存总数: ${audioCache.size})`);
+      console.log(`💾 音频已缓存: "${normalizedText}" [${voiceType}] (缓存总数: ${audioCache.size})`);
       
       return response.data;
     } else {
@@ -197,10 +234,11 @@ export const playAudioBlob = (audioBlob) => {
 /**
  * 朗读文本（合成 + 播放）
  * @param {string} text - 要朗读的文本
+ * @param {string} voiceType - 发音类型 'us' 美式 或 'uk' 英式
  * @returns {Promise<HTMLAudioElement>}
  */
-export const speakText = async (text) => {
-  const audioBlob = await textToSpeech(text);
+export const speakText = async (text, voiceType = 'us') => {
+  const audioBlob = await textToSpeech(text, voiceType);
   return playAudioBlob(audioBlob);
 };
 
