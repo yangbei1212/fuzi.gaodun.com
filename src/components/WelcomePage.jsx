@@ -10,7 +10,8 @@ import {
   TrophyOutlined,
   BulbOutlined,
   LeftOutlined,
-  RightOutlined
+  RightOutlined,
+  LockOutlined
 } from '@ant-design/icons';
 
 const { Title, Paragraph, Text } = Typography;
@@ -284,6 +285,60 @@ const WelcomePage = ({ onStartChat, cardImages = [] }) => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* 专属单词本模块 */}
+        <div className="word-book-section">
+          <div className="card-showcase-title">
+            <Title level={3} className="showcase-title">待解锁功能</Title>
+            <Paragraph className="showcase-subtitle">更多神奇能力敬请期待</Paragraph>
+          </div>
+          
+          <div className="word-book-grid">
+            {/* 第一个卡片：专属单词本 */}
+            <div 
+              className="word-book-card locked"
+              style={{ animationDelay: '0s' }}
+            >
+              <div className="word-book-card-inner special-card">
+                <div className="special-card-header">
+                  <div className="special-card-title">专属单词本</div>
+                  <div className="special-card-subtitle">各类英语证书趣味通关</div>
+                </div>
+                <div className="special-card-buttons">
+                  <button className="special-btn">四级</button>
+                  <button className="special-btn">六级</button>
+                  <button className="special-btn">雅思</button>
+                  <button className="special-btn">托福</button>
+                </div>
+                <div className="word-book-lock-overlay">
+                  <LockOutlined className="lock-icon" />
+                  <div className="lock-text">待解锁</div>
+                </div>
+              </div>
+            </div>
+
+            {/* 第二个卡片：fufu创作者计划 */}
+            <div 
+              className="word-book-card locked"
+              style={{ animationDelay: '0.15s' }}
+            >
+              <div className="word-book-card-inner special-card">
+                <div className="special-card-header">
+                  <div className="special-card-title">fufu创作者计划</div>
+                  <div className="special-card-subtitle">创建优秀单词卡，赢现金激励</div>
+                </div>
+                <div className="special-card-buttons">
+                  <button className="special-btn">上传我的单词卡</button>
+                  <button className="special-btn">创作者排行</button>
+                </div>
+                <div className="word-book-lock-overlay">
+                  <LockOutlined className="lock-icon" />
+                  <div className="lock-text">待解锁</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

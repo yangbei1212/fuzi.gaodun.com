@@ -3155,6 +3155,179 @@ code {
   transform: translateY(0);
 }
 
+/* 专属单词本模块 */
+.word-book-section {
+  margin-top: 80px;
+  padding: 0 40px;
+  animation: fadeInUp 1s ease-out 0.8s backwards;
+  min-height: 55vh;
+  width: 100%;
+}
+
+.word-book-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.word-book-card {
+  aspect-ratio: 9 / 16;
+  cursor: not-allowed;
+  animation: scaleIn 0.6s ease-out backwards;
+  position: relative;
+  border-radius: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 
+    0 8px 16px rgba(0, 0, 0, 0.5),
+    0 16px 32px rgba(0, 0, 0, 0.3),
+    0 24px 48px rgba(0, 0, 0, 0.15),
+    0 32px 64px rgba(0, 0, 0, 0.05),
+    0 40px 80px rgba(0, 0, 0, 0);
+}
+
+.word-book-card.locked:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 
+    0 12px 24px rgba(0, 0, 0, 0.5),
+    0 24px 48px rgba(0, 0, 0, 0.35),
+    0 36px 72px rgba(0, 0, 0, 0.2),
+    0 48px 96px rgba(0, 0, 0, 0.1),
+    0 60px 120px rgba(0, 0, 0, 0);
+}
+
+.word-book-card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: #d9d9d924;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  display: flex
+;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px 20px;
+  /* OVERFLOW: HIDDEN; */
+  overflow: hidden;
+}
+
+.word-book-icon {
+  font-size: 80px;
+  line-height: 1;
+  filter: grayscale(100%) opacity(0.5);
+  transition: all 0.3s ease;
+}
+
+.word-book-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+/* 特殊卡片样式 */
+.special-card {
+  justify-content: flex-start !important;
+  padding: 32px 24px !important;
+  gap: 24px !important;
+}
+
+.special-card-header {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.special-card-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 8px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.special-card-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.special-card-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+.special-btn {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: not-allowed;
+  transition: all 0.3s ease;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.special-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.word-book-lock-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(0.5px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.lock-icon {
+  font-size: 48px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.6);
+  animation: lockFloat 3s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.lock-text {
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 8px 24px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+}
+
+@keyframes lockFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
 /* 扇形轮播图弹窗 */
 .fan-carousel-modal .ant-modal-content {
   background: rgba(255, 255, 255, 0.95) !important;
@@ -3664,6 +3837,16 @@ code {
     gap: 28px;
   }
 
+  .word-book-section {
+    margin-top: 60px;
+    padding: 0 32px;
+  }
+
+  .word-book-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+
   .welcome-bottom-section {
     padding: 0 32px;
   }
@@ -3677,10 +3860,6 @@ code {
   }
 
   /* Hover轮播图适配 */
-  .carousel-modal-wrapper .ant-modal-content {
-    width: 70vw;
-  }
-
   .carousel-track-wrapper {
     height: calc(75vh - 160px);
   }
@@ -3830,6 +4009,52 @@ code {
   .showcase-card-hover-text {
     font-size: 16px;
     padding: 10px 24px;
+  }
+
+  .word-book-section {
+    margin-top: 48px;
+    padding: 0 24px;
+  }
+
+  .word-book-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .word-book-icon {
+    font-size: 60px;
+  }
+
+  .word-book-title {
+    font-size: 24px;
+  }
+
+  .special-card {
+    padding: 28px 20px !important;
+    gap: 20px !important;
+  }
+
+  .special-card-title {
+    font-size: 20px;
+  }
+
+  .special-card-subtitle {
+    font-size: 13px;
+  }
+
+  .special-btn {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .lock-icon {
+    font-size: 40px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .lock-text {
+    font-size: 18px;
+    padding: 6px 20px;
   }
 
   /* Hover轮播图适配 */
@@ -4025,6 +4250,61 @@ code {
   .showcase-card-hover-text {
     font-size: 14px;
     padding: 8px 20px;
+  }
+
+  .word-book-section {
+    margin-top: 40px;
+    padding: 0 20px;
+  }
+
+  .word-book-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .word-book-card-inner {
+    padding: 30px 16px;
+    gap: 16px;
+  }
+
+  .word-book-icon {
+    font-size: 50px;
+  }
+
+  .word-book-title {
+    font-size: 22px;
+  }
+
+  .special-card {
+    padding: 24px 16px !important;
+    gap: 16px !important;
+  }
+
+  .special-card-title {
+    font-size: 18px;
+  }
+
+  .special-card-subtitle {
+    font-size: 12px;
+  }
+
+  .special-card-buttons {
+    gap: 10px;
+  }
+
+  .special-btn {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .lock-icon {
+    font-size: 36px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .lock-text {
+    font-size: 16px;
+    padding: 6px 16px;
   }
 
   /* Hover轮播图小屏适配 */

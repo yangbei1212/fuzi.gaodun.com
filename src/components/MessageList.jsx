@@ -77,8 +77,7 @@ const MessageItem = ({ message, voiceType }) => {
       antdMessage.warning('没有找到要朗读的内容');
       return;
     }
-    
-    console.log('准备朗读单词:', wordToSpeak);
+
     
     // 开始播放
     setIsPlaying(prev => ({
