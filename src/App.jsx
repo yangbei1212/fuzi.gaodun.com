@@ -187,14 +187,16 @@ const App = () => {
                       onClick={() => setVoiceType('us')}
                       title="美式发音"
                     >
-                      🇺🇸
+                      <span className="voice-flag">🇺🇸</span>
+                      <span className="voice-text">美</span>
                     </button>
                     <button 
                       className={`voice-btn ${voiceType === 'uk' ? 'active' : ''}`}
                       onClick={() => setVoiceType('uk')}
                       title="英式发音"
                     >
-                      🇬🇧
+                      <span className="voice-flag">🇬🇧</span>
+                      <span className="voice-text">英</span>
                     </button>
                   </div>
                 </div>

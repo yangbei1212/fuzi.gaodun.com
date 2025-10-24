@@ -36,6 +36,6 @@ export const MESSAGE_TYPES = {
 export const WELCOME_MESSAGE = {
   id: 1,
   type: 'assistant',
-  content: 'Hi，终于遇到你了！我是你的单词学习助手-xiaoFu\n听说还有人在abandon，abandon，abandon的背单词？最后abandon了么？\n遇到xiaoFu我，将带你打开新世界哦～\n我将为你定制准属于你的单词卡\n你可以给我一张你的宝宝照片、你的毛孩子照片、你的电子"老公"、电子"老婆"照片，甚至自恋的自己的照片，都可以！让你的心爱的宝贝为你展示单词，学习单词不再枯燥！\n赶紧体验一下吧\n第一步：上传一张爱照，建议脸部无遮挡哟\n第二步：给我你的目标单词',
+  content: 'Hi，终于遇到你了！我是你的单词学习助手-fufu\n听说还有人在abandon，abandon，abandon的背单词？最后abandon了么？\n遇到fufu我，将带你打开新世界哦～\n我将为你定制准属于你的单词卡\n你可以给我一张你的宝宝照片、你的毛孩子照片、你的电子"老公"、电子"老婆"照片，甚至自恋的自己的照片，都可以！让你的心爱的宝贝为你展示单词，学习单词不再枯燥！\n赶紧体验一下吧\n第一步：上传一张爱照，建议脸部无遮挡哟\n第二步：给我你的目标单词',
   timestamp: Date.now()
 };
