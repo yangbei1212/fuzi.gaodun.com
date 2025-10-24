@@ -216,57 +216,7 @@ const WelcomePage = ({ onStartChat, cardImages = [] }) => {
             </div>
           </div>
 
-          {/* 右侧区域 30% */}
-          <div className="welcome-right-area">
-            {/* 社会证明 - 精简版 */}
-            <div className="social-proof-vertical">
-              <div className="proof-item-vertical">
-                <span className="proof-number">{stats.users.toLocaleString()}+</span>
-                <span className="proof-label">学习用户</span>
-              </div>
-              <div className="proof-item-vertical">
-                <span className="proof-number">{stats.cards.toLocaleString()}+</span>
-                <span className="proof-label">生成卡片</span>
-              </div>
-              <div className="proof-item-vertical">
-                <span className="proof-number">{stats.success}%</span>
-                <span className="proof-label">好评率</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Features Section - 三个特性卡片 */}
-        <div className="features-section-horizontal">
-          <div className="feature-card-modern" style={{ animationDelay: '0.1s' }}>
-            <div className="feature-icon-modern">
-              <PictureOutlined />
-            </div>
-            <Title level={4} className="feature-title-modern">个性化卡片</Title>
-            <Paragraph className="feature-desc-modern">
-              上传照片，AI智能生成专属学习卡
-            </Paragraph>
-          </div>
-          
-          <div className="feature-card-modern" style={{ animationDelay: '0.2s' }}>
-            <div className="feature-icon-modern">
-              <ThunderboltOutlined />
-            </div>
-            <Title level={4} className="feature-title-modern">场景记忆</Title>
-            <Paragraph className="feature-desc-modern">
-              结合图片场景，让单词印象更深刻
-            </Paragraph>
-          </div>
-          
-          <div className="feature-card-modern" style={{ animationDelay: '0.3s' }}>
-            <div className="feature-icon-modern">
-              <RocketOutlined />
-            </div>
-            <Title level={4} className="feature-title-modern">高效学习</Title>
-            <Paragraph className="feature-desc-modern">
-              正反两面设计，科学记忆更轻松
-            </Paragraph>
-          </div>
+      
         </div>
 
         {/* 下部分：三个9:16卡片 */}
@@ -302,63 +252,62 @@ const WelcomePage = ({ onStartChat, cardImages = [] }) => {
         </div>
       </div>
 
-      {/* 扇形轮播图弹窗 */}
+      {/* 走马灯轮播图弹窗 */}
       <Modal
         open={modalVisible}
         onCancel={() => setModalVisible(false)}
         footer={null}
-        width="75vw"
+        width="60vw"
         centered
-        className="card-carousel-modal fan-carousel-modal"
+        className="carousel-modal-wrapper"
         styles={{
-          body: { padding: 0, overflow: 'visible' }
+          body: { padding: 0 }
         }}
       >
-        <div className="fan-carousel-container">
-          {/* 左箭头 */}
-          <button className="fan-nav-button fan-nav-prev" onClick={handlePrevCard}>
-            <LeftOutlined />
-          </button>
+        <div className="carousel-container">
+          {/* 主图区域 */}
+          <div className="carousel-main-area">
+            {/* 左箭头 */}
+            <button className="carousel-nav-btn carousel-prev" onClick={handlePrevCard}>
+              <LeftOutlined />
+            </button>
 
-          {/* 扇形卡片容器 */}
-          <div className="fan-cards-wrapper">
-            {displayCards.map((card, index) => {
-              const offset = index - currentCardIndex;
-              const isActive = index === currentCardIndex;
-              
-              return (
-                <div
-                  key={card.id || index}
-                  className={`fan-card ${isActive ? 'active' : ''} ${offset < 0 ? 'left' : offset > 0 ? 'right' : ''}`}
-                  style={{
-                    '--offset': offset,
-                    zIndex: displayCards.length - Math.abs(offset),
-                  }}
-                  onClick={() => !isActive && handleFanCardClick(index)}
-                >
-                  <div className="fan-card-inner">
+            {/* 轮播图片 */}
+            <div className="carousel-track-wrapper">
+              <div 
+                className="carousel-track"
+                style={{
+                  transform: `translateX(calc(-${currentCardIndex * 100}% - ${currentCardIndex * 24}px))`
+                }}
+              >
+                {displayCards.map((card, index) => (
+                  <div
+                    key={card.id || index}
+                    className={`carousel-item ${index === currentCardIndex ? 'active' : ''}`}
+                    onClick={() => index !== currentCardIndex && setCurrentCardIndex(index)}
+                  >
                     <img 
                       src={card.image} 
                       alt={`Card ${index + 1}`}
-                      className="fan-card-image"
+                      className="carousel-item-image"
                     />
                   </div>
-                </div>
-              );
-            })}
+                ))}
+              </div>
+            </div>
+
+            {/* 右箭头 */}
+            <button className="carousel-nav-btn carousel-next" onClick={handleNextCard}>
+              <RightOutlined />
+            </button>
           </div>
 
-          {/* 右箭头 */}
-          <button className="fan-nav-button fan-nav-next" onClick={handleNextCard}>
-            <RightOutlined />
-          </button>
-
-          {/* 指示器 */}
-          <div className="fan-carousel-indicators">
+          {/* 底部指示器 */}
+          <div className="carousel-indicators">
             {displayCards.map((_, index) => (
               <button
                 key={index}
-                className={`fan-indicator ${index === currentCardIndex ? 'active' : ''}`}
+                className={`carousel-dot ${index === currentCardIndex ? 'active' : ''}`}
                 onClick={() => setCurrentCardIndex(index)}
               />
             ))}
