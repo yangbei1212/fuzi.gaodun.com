@@ -47,7 +47,7 @@ const ImageUpload = ({
         {hasImage ? '已上传图片' : '添加图片'}
       </div>
       
-      {/* 当有图片时显示图片预览 */}
+      {/* 当有图片时显示图片预览 --999*/}
       {hasImage && currentImage && (
         <div className="single-image-preview">
           <div className="preview-image-wrapper">
