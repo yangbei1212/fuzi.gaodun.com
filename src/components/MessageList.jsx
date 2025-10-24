@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Modal, message as antdMessage } from 'antd';
-import { MessageOutlined, UserOutlined, SoundOutlined } from '@ant-design/icons';
+import { MessageOutlined, UserOutlined, SoundOutlined, DownloadOutlined } from '@ant-design/icons';
 import { formatTime } from '../utils';
 import { speakText } from '../services/tts';
 
@@ -93,6 +93,106 @@ const MessageItem = ({ message, voiceType }) => {
     }));
   };
 
+  // 下载图片
+  const handleDownloadImage = async (imageUrl, index) => {
+    try {
+      antdMessage.loading({ content: '正在下载...', key: 'download' });
+      
+      // 生成文件名：使用单词名称或时间戳
+      const fileName = message.word 
+        ? `${message.word}_${index + 1}.jpg`
+        : `wordcard_${Date.now()}_${index + 1}.jpg`;
+      
+      // 方法1: 尝试通过fetch下载（支持同源和配置了CORS的跨域资源）
+      try {
+        const response = await fetch(imageUrl, {
+          mode: 'cors',
+          credentials: 'omit'
+        });
+        
+        if (response.ok) {
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = fileName;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+          
+          antdMessage.success({ content: '下载成功！', key: 'download', duration: 2 });
+          return;
+        }
+      } catch (fetchError) {
+        console.warn('Fetch下载失败，尝试备用方案:', fetchError);
+      }
+      
+      // 方法2: 使用canvas转换（尝试处理跨域图片）
+      try {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        
+        await new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = reject;
+          img.src = imageUrl;
+        });
+        
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            
+            antdMessage.success({ content: '下载成功！', key: 'download', duration: 2 });
+          } else {
+            throw new Error('Canvas转换失败');
+          }
+        }, 'image/jpeg', 0.95);
+        
+        return;
+      } catch (canvasError) {
+        console.warn('Canvas下载失败，使用最终备用方案:', canvasError);
+      }
+      
+      // 方法3: 直接使用a标签（可能在新标签打开而不是下载）
+      const link = document.createElement('a');
+      link.href = imageUrl;
+      link.download = fileName;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      antdMessage.info({ 
+        content: '图片已在新标签打开，请右键保存', 
+        key: 'download', 
+        duration: 3 
+      });
+      
+    } catch (error) {
+      console.error('下载图片失败:', error);
+      antdMessage.error({ 
+        content: '下载失败，请尝试右键图片另存为', 
+        key: 'download', 
+        duration: 3 
+      });
+    }
+  };
+
   return (
     <div 
       className={`message-item ${message.type === 'user' ? 'user-message' : 'assistant-message'}`}
@@ -159,6 +259,14 @@ const MessageItem = ({ message, voiceType }) => {
                 <SoundOutlined className="preview-sound-icon" />
               </div>
             )}
+            {/* 下载按钮 - 右下角 */}
+            <div 
+              className="preview-download-button"
+              onClick={() => handleDownloadImage(imageUrl, index)}
+              title="下载图片"
+            >
+              <DownloadOutlined className="preview-download-icon" />
+            </div>
           </div>
         </Modal>
       ))}

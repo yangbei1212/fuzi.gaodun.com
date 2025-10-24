@@ -2155,6 +2155,45 @@ code {
   padding: 0;
 }
 
+/* 预览模态框关闭按钮 - 增强显示 */
+.image-preview-modal .ant-modal-close {
+  top: 16px;
+  right: 16px;
+  width: 56px;
+  height: 56px;
+  background: rgba(0, 0, 0, 0.75);
+  border-radius: 50%;
+  backdrop-filter: blur(12px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-preview-modal .ant-modal-close:hover {
+  background: rgba(255, 59, 48, 0.9);
+  transform: scale(1.15) rotate(90deg);
+  box-shadow: 0 6px 24px rgba(255, 59, 48, 0.6);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.image-preview-modal .ant-modal-close-x {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: white;
+  line-height: 1;
+}
+
+.image-preview-modal .ant-modal-close:hover .ant-modal-close-x {
+  color: white;
+}
+
 .preview-container {
   position: relative;
   display: flex;
@@ -2181,6 +2220,47 @@ code {
 
 .portrait-preview-modal .ant-modal-body {
   padding: 0;
+}
+
+/* 纵向预览关闭按钮 - 增强版 */
+.portrait-preview-modal .ant-modal-close {
+  top: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 50%;
+  backdrop-filter: blur(12px);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: closeBtnPulse 2s ease-in-out infinite;
+}
+
+.portrait-preview-modal .ant-modal-close:hover {
+  background: rgba(255, 59, 48, 0.95);
+  transform: scale(1.2) rotate(90deg);
+  box-shadow: 0 8px 32px rgba(255, 59, 48, 0.7);
+  border-color: rgba(255, 255, 255, 0.6);
+  animation: none;
+}
+
+.portrait-preview-modal .ant-modal-close-x {
+  font-size: 28px;
+  color: white;
+  font-weight: bold;
+}
+
+/* 关闭按钮脉冲动画 - 吸引注意 */
+@keyframes closeBtnPulse {
+  0%, 100% {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3), 0 0 30px rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.6);
+  }
 }
 
 .portrait-preview-container {
@@ -2286,6 +2366,59 @@ code {
   font-size: 28px;
 }
 
+/* 预览模态框中的下载按钮 - 右下角 */
+.preview-download-button {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  background: rgba(0, 0, 0, 0.75);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.preview-download-button:hover {
+  background: linear-gradient(135deg, rgba(24, 144, 255, 0.9), rgba(64, 169, 255, 0.9));
+  transform: scale(1.15);
+  box-shadow: 0 6px 24px rgba(24, 144, 255, 0.5);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.preview-download-button:active {
+  transform: scale(1.05);
+}
+
+.preview-download-icon {
+  font-size: 26px;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.preview-download-button:hover .preview-download-icon {
+  transform: scale(1.1);
+}
+
+/* 纵向预览中的下载按钮优化 */
+.portrait-preview-container .preview-download-button {
+  bottom: 24px;
+  right: 24px;
+  width: 60px;
+  height: 60px;
+}
+
+.portrait-preview-container .preview-download-icon {
+  font-size: 28px;
+}
+
 /* 确保Ant Design的预览功能正常工作 */
 .ant-image-preview-wrap {
   z-index: 9999;
@@ -2343,6 +2476,18 @@ code {
   .voice-btn {
     font-size: 18px;
     padding: 5px 10px;
+  }
+  
+  /* 平板端关闭按钮优化 */
+  .portrait-preview-modal .ant-modal-close {
+    top: 16px;
+    right: 16px;
+    width: 56px;
+    height: 56px;
+  }
+  
+  .portrait-preview-modal .ant-modal-close-x {
+    font-size: 26px;
   }
 }
 
@@ -2613,6 +2758,30 @@ code {
   }
   
   .portrait-preview-container .preview-sound-icon {
+    font-size: 24px;
+  }
+  
+  /* 移动端下载按钮优化 */
+  .portrait-preview-container .preview-download-button {
+    bottom: 16px;
+    right: 16px;
+    width: 52px;
+    height: 52px;
+  }
+  
+  .portrait-preview-container .preview-download-icon {
+    font-size: 24px;
+  }
+  
+  /* 移动端关闭按钮优化 */
+  .portrait-preview-modal .ant-modal-close {
+    top: 12px;
+    right: 12px;
+    width: 52px;
+    height: 52px;
+  }
+  
+  .portrait-preview-modal .ant-modal-close-x {
     font-size: 24px;
   }
 }
