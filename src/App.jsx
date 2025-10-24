@@ -129,22 +129,18 @@ const App = () => {
           height: '100%'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <div style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '12px',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              fontSize: '20px',
-              fontWeight: 'bold',
-              boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)',
-              animation: 'logoFloat 3s ease-in-out infinite'
-            }}>
-              夫
-            </div>
+            <img 
+              src="https://simg01.gaodunwangxiao.com/uploadfiles/tmp/upload/202510/24/e9360_20251024105135.jpg"
+              alt="fufu单词卡"
+              style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '12px',
+                objectFit: 'cover',
+                boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)',
+                animation: 'logoFloat 3s ease-in-out infinite'
+              }}
+            />
             <Title level={3} style={{ 
               margin: 0, 
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -152,7 +148,7 @@ const App = () => {
               WebkitTextFillColor: 'transparent',
               fontWeight: 700
             }}>
-              夫子单词卡
+              fufu单词卡
             </Title>
           </div>
         </div>

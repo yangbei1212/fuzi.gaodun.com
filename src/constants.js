@@ -30,6 +30,7 @@ export const IMAGE_CONFIG = {
 export const MESSAGE_TYPES = {
   USER: 'user',
   ASSISTANT: 'assistant'
+  
 };
 
 // 默认欢迎消息

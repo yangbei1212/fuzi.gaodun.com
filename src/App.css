@@ -3028,7 +3028,7 @@ code {
 
 /* 下部分：卡片展示区 */
 .welcome-bottom-section {
-  margin-top: 60px;
+  margin-top: 10px;
   padding: 0 40px;
   animation: fadeInUp 1s ease-out 0.5s backwards;
   min-height: 55vh;
@@ -3374,6 +3374,14 @@ code {
 /* Hover触发的轮播图弹窗 */
 .carousel-modal-wrapper .ant-modal-wrap {
   pointer-events: auto;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.carousel-modal-wrapper .ant-modal {
+  top: 0 !important;
+  padding-bottom: 0 !important;
 }
 
 .carousel-modal-wrapper .ant-modal-content {
@@ -3816,7 +3824,7 @@ code {
 
   .welcome-bottom-section {
     padding: 0 24px;
-    margin-top: 48px;
+    margin-top: 12px;
   }
 
   .showcase-card-hover-text {
@@ -3825,16 +3833,27 @@ code {
   }
 
   /* Hover轮播图适配 */
+  .carousel-modal-wrapper .ant-modal-wrap {
+    padding: 15px !important;
+  }
+
   .carousel-modal-wrapper .ant-modal-content {
     width: 85vw;
+    max-height: 85vh;
+  }
+
+  .carousel-modal-wrapper .ant-modal-body {
+    max-height: calc(85vh - 80px);
   }
 
   .carousel-track-wrapper {
-    height: calc(70vh - 140px);
+    height: calc(85vh - 180px);
+    max-height: calc(85vh - 180px);
   }
 
   .carousel-item {
-    height: calc(70vh - 140px);
+    height: calc(85vh - 180px);
+    max-height: calc(85vh - 180px);
   }
 
   .carousel-nav-btn {
@@ -3994,7 +4013,7 @@ code {
   }
 
   .welcome-bottom-section {
-    margin-top: 40px;
+    margin-top: 10px;
     padding: 0 20px;
   }
 
@@ -4009,16 +4028,33 @@ code {
   }
 
   /* Hover轮播图小屏适配 */
+  .carousel-modal-wrapper .ant-modal-wrap {
+    padding: 10px !important;
+  }
+
   .carousel-modal-wrapper .ant-modal-content {
     width: 92vw;
+    max-height: 85vh;
+  }
+
+  .carousel-modal-wrapper .ant-modal-body {
+    max-height: calc(85vh - 80px);
+    overflow: hidden;
+  }
+
+  .carousel-container {
+    padding: 12px 8px 10px;
+    max-height: 100%;
   }
 
   .carousel-track-wrapper {
-    height: calc(65vh - 130px);
+    height: calc(85vh - 200px);
+    max-height: calc(85vh - 200px);
   }
 
   .carousel-item {
-    height: calc(65vh - 130px);
+    height: calc(85vh - 200px);
+    max-height: calc(85vh - 200px);
   }
 
   .carousel-nav-btn {
@@ -4027,13 +4063,9 @@ code {
     font-size: 12px;
   }
 
-  .carousel-container {
-    padding: 16px 10px 14px;
-  }
-
   .carousel-main-area {
     gap: 6px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   .carousel-modal-wrapper .ant-modal-close {

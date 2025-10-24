@@ -344,7 +344,7 @@ const LoadingMessage = () => (
           <span></span>
           <span></span>
         </div>
-        AI正在思考中...
+        fufu正在制作单词卡，我知道你很急，但是你先别急～...
       </div>
       <div className="message-time">{formatTime(Date.now())}</div>
     </div>

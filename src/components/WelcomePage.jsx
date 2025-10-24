@@ -246,7 +246,7 @@ const WelcomePage = ({ onStartChat, cardImages = [] }) => {
                   开始创作
                 </Button>
                 <Text className="hero-cta-hint">
-                  免费试用 · 无需注册
+                fufu单词卡，学词乐哈哈！
                 </Text>
               </div>
             </div>
